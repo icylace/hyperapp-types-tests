@@ -30,7 +30,12 @@
 
 /**
  * @template S
- * @typedef { import("hyperapp").StateFormat<S> } StateFormat
+ * @typedef { import("hyperapp").State<S> } State
+ */
+
+/**
+ * @template S
+ * @typedef { import("hyperapp").StateWithEffects<S> } StateWithEffects
  */
 
 import { app, h, text } from "hyperapp"
@@ -172,7 +177,7 @@ const myTimeout = (dispatch, props) => {
 /**
  * @template S
  * @param {number} delay
- * @param {StateFormat<S> | Action<S, any>} action
+ * @param {State<S> | StateWithEffects<S> | Action<S, any>} action
  * @returns {Effect<S, any>}
  */
 const myDelay = (delay, action) =>
