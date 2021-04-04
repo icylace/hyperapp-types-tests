@@ -1,0 +1,24 @@
+{
+  "name": "hyperapp-types-tests",
+  "version": "0.1.2",
+  "description": "The test suite for Hyperapp's TypeScript definitions.",
+  "repository": "icylace/hyperapp-types-tests",
+  "homepage": "https://github.com/icylace/hyperapp-types-tests",
+  "author": "Ron Martinez",
+  "license": "MIT",
+  "files": [
+    "index.d.ts"
+  ],
+  "keywords": [
+    "hyperapp",
+    "testing"
+  ],
+  "scripts": {
+    "test": "dtslint"
+  },
+  "devDependencies": {
+    "dtslint": "*",
+    "hyperapp": "*",
+    "typescript": "*"
+  }
+}
