@@ -1,4 +1,4 @@
-import { Action, Dispatch, EffectCreator, Effect, StateFormat } from "hyperapp"
+import { Action, Dispatch, Effect, EffectCreator, State, StateWithEffects } from "hyperapp"
 
 import { app, h, text } from "hyperapp"
 
@@ -140,7 +140,7 @@ const myTimeout = <S>(dispatch: Dispatch<S>, props: any) => {
   setTimeout(() => dispatch(props.action), props.delay)
 }
 
-const myDelay = <S>(delay: number, action: StateFormat<S> | Action<S>): Effect<S> =>
+const myDelay = <S>(delay: number, action: State<S> | StateWithEffects<S> | Action<S>): Effect<S> =>
   [myTimeout, { delay, action }]
 
 const IncrementFoo: Action<Test> = (state) =>
