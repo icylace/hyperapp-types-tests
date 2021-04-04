@@ -11,6 +11,7 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "noEmit": true,
+    "paths": { "hyperapp": ["./node_modules/hyperapp"] },
     "strict": true,
     "target": "ESNext"
   }
