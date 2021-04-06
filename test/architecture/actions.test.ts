@@ -121,7 +121,7 @@ h("button", { onclick: AddSome }, text("add event?!"))
 h("button", { onclick: [AddSome, 32] }, text("add 32"))
 
 // TODO:
-// $ ExpectError
+// $ExpectError
 h("button", { onclick: [AddSome, "foo"] }, text("add string?!"))
 
 // -----------------------------------------------------------------------------
@@ -143,5 +143,5 @@ h("button", { onclick: AddSomeMore }, text("add event?!"))
 h("button", { onclick: [AddSomeMore, 32] }, text("add 32"))
 
 // TODO:
-// $ ExpectError
+// $ExpectError
 h("button", { onclick: [AddSomeMore, "foo"] }, text("add string?!"))

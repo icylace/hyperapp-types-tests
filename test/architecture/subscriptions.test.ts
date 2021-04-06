@@ -40,3 +40,9 @@ app<Test>({
   ],
   node: document.body
 })
+
+// -----------------------------------------------------------------------------
+
+// 4/3/2021, 9:57 AM
+// TODO:
+// - test if just a cleanup function can be the payload of a subscription

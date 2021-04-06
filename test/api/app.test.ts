@@ -1,4 +1,14 @@
-import { Action, Dispatch, Effect, EffectCreator, State, StateWithEffects } from "hyperapp"
+import {
+  Action,
+  Dispatch,
+  DispatchInitializer,
+  Effect,
+  EffectCreator,
+  State,
+  StateWithEffects,
+  Subscriptions,
+  View,
+} from "hyperapp"
 
 import { app, h, text } from "hyperapp"
 
@@ -25,38 +35,48 @@ app(undefined)    // $ExpectError
 
 type Test = { bar?: number, foo: number }
 
-const runTestFx = <S>(dispatch: Dispatch<S>): void => console.log("test")
+const init: State<Test> = { foo: 0 }
+const view: View<Test> = text
+const node: Node = document.body
+const subscriptions: Subscriptions<Test> = (_) => []
+const dispatch: DispatchInitializer<Test> = (x) => x
 
-const testFx: EffectCreator<Test> = () => [runTestFx, undefined]
+app({ init })                                         // $ExpectType Dispatch<Test>
+app({ init, view })                                   // $ExpectError
+app({ init, node })                                   // $ExpectError
+app({ init, subscriptions })                          // $ExpectType Dispatch<Test>
+app({ init, dispatch })                               // $ExpectType Dispatch<Test>
+app({ init, view, node })                             // $ExpectType Dispatch<Test>
+app({ init, view, subscriptions })                    // $ExpectError
+app({ init, view, dispatch })                         // $ExpectError
+app({ init, node, subscriptions })                    // $ExpectError
+app({ init, node, dispatch })                         // $ExpectError
+app({ init, subscriptions, dispatch })                // $ExpectType Dispatch<Test>
+app({ init, view, node, subscriptions })              // $ExpectType Dispatch<Test>
+app({ init, view, node, dispatch })                   // $ExpectType Dispatch<Test>
+app({ init, view, subscriptions, dispatch })          // $ExpectError
+app({ init, node, subscriptions, dispatch })          // $ExpectError
+app({ init, view, node, subscriptions, dispatch })    // $ExpectType Dispatch<Test>
+app({ view })                                         // $ExpectError
+app({ view, node })                                   // $ExpectType Dispatch<Test>
+app({ view, subscriptions })                          // $ExpectError
+app({ view, dispatch })                               // $ExpectError
+app({ view, node, subscriptions })                    // $ExpectType Dispatch<Test>
+app({ view, node, dispatch })                         // $ExpectType Dispatch<Test>
+app({ view, node, subscriptions, dispatch })          // $ExpectType Dispatch<Test>
+app({ node })                                         // $ExpectError
+app({ node, subscriptions })                          // $ExpectError
+app({ node, dispatch })                               // $ExpectError
+app({ node, subscriptions, dispatch })                // $ExpectError
+app({ subscriptions })                                // $ExpectType Dispatch<Test>
+app({ subscriptions, dispatch })                      // $ExpectType Dispatch<Test>
+app({ dispatch })                                     // $ExpectType Dispatch<Test>
 
 // -----------------------------------------------------------------------------
 
-// $ExpectType Dispatch<Test>
-app<Test>({ init: { foo: 0 } })
+const runTestFx = <S>(dispatch: Dispatch<S>): void => console.log("test")
 
-// TODO:
-// $ ExpectError
-app<Test>({ init: { foo: 0 }, node: document.body })
-
-// $ExpectType Dispatch<Test>
-app<Test>({ init: { foo: 0 }, view: text, node: document.body })
-
-// TODO:
-// $ ExpectError
-app<Test>({ init: { foo: 0 }, view: () => text(42) })
-
-// TODO:
-// $ ExpectError
-app<Test>({ dispatch: (x) => x, node: document.body })
-
-// $ExpectError
-app<Test>({ view: () => text(42) })
-
-// $ExpectError
-app<Test>({ node: document.body })
-
-// $ExpectType Dispatch<Test>
-app<Test>({ view: () => text(42), node: document.body })
+const testFx: EffectCreator<Test> = () => [runTestFx, undefined]
 
 // -----------------------------------------------------------------------------
 

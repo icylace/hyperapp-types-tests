@@ -15,7 +15,7 @@ This is the [dtslint](https://github.com/microsoft/dtslint)-based types test sui
 
 ## Unsolved Cases
 
-Some test cases are currently unsolved. They are preceded by a `TODO` comment. To "see" these tests, remove the space after the `$` on the comment lines containing [dtslint assertions](https://github.com/microsoft/dtslint#write-tests).
+Some test cases are currently unsolved and will be shown when you run `npm test`.
 
 ## Contributing
 
