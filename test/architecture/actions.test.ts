@@ -1,6 +1,6 @@
 import type { Dispatch, EffectCreator, Payload, State, StateWithEffects } from "hyperapp"
 
-import { app, h, text } from "hyperapp"
+import { h, text, app } from "hyperapp"
 
 type Test = { x: number, y: number }
 
@@ -145,3 +145,26 @@ h("button", { onclick: [AddSomeMore, 32] }, text("add 32"))
 // TODO:
 // $ExpectError
 h("button", { onclick: [AddSomeMore, "foo"] }, text("add string?!"))
+
+// -----------------------------------------------------------------------------
+
+type LocalState = { inputText: string }
+
+const HandleInput = (state: LocalState, event: Event) => ({
+  ...state,
+  inputText: (event.target as HTMLInputElement).value,
+})
+
+// $ExpectType Dispatch<LocalState>
+app<LocalState>({
+  node: document.body,
+  init: { inputText: "" },
+  view: state =>
+    h("main", {}, [
+      h("input", {
+        type: "text",
+        value: state.inputText,
+        oninput: HandleInput,
+      }),
+    ]),
+})

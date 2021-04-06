@@ -72,6 +72,13 @@ app({ subscriptions })                                // $ExpectType Dispatch<Te
 app({ subscriptions, dispatch })                      // $ExpectType Dispatch<Test>
 app({ dispatch })                                     // $ExpectType Dispatch<Test>
 
+// $ExpectType Dispatch<string>
+app<string>({
+  init: (state = "hi") => state,
+  view: text,
+  node: document.body,
+})
+
 // -----------------------------------------------------------------------------
 
 const runTestFx = <S>(dispatch: Dispatch<S>): void => console.log("test")
