@@ -132,7 +132,6 @@ app<Test>({
     h("button", {
       onclick: (state) => ({ ...state, bar: state.foo * 2 }),
       onchange: (state, event) => {
-        if (!event) return state
         const target = event.target as HTMLInputElement
         return ({ ...state, bar: target.checked ? 20 : 10 })
       },

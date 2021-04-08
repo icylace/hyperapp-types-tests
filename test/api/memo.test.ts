@@ -24,10 +24,10 @@ memo(text("hi"), undefined)    // $ExpectError
 memo(text("hi"), null)         // $ExpectError
 memo(text("hi"), {})           // $ExpectError
 
-memo(text, "hi")               // $ExpectType VDOM<unknown>
-memo(text, ["hi"])             // $ExpectType VDOM<unknown>
+memo(text, "hi")               // $ExpectType VDOM<unknown, unknown>
+memo(text, ["hi"])             // $ExpectType VDOM<unknown, unknown>
 
-// $ExpectType VDOM<unknown>
+// $ExpectType VDOM<unknown, unknown>
 memo((data) => h("div", {}, text(data)), "hi")
 
-h("div", {}, memo(text, ["hi"]))    // $ExpectType VDOM<unknown>
+h("div", {}, memo(text, ["hi"]))    // $ExpectType VDOM<unknown, unknown>

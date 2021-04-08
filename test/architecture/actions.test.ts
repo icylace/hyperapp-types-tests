@@ -117,10 +117,9 @@ app<Foo>({ init: [AddSome, 42] })
 // $ExpectError
 h("button", { onclick: AddSome }, text("add event?!"))
 
-// $ExpectType VDOM<Foo>
+// $ExpectType VDOM<Foo, unknown>
 h("button", { onclick: [AddSome, 32] }, text("add 32"))
 
-// TODO:
 // $ExpectError
 h("button", { onclick: [AddSome, "foo"] }, text("add string?!"))
 
@@ -139,10 +138,9 @@ const AddSomeMore: ActionTransform<AppState, number> =
 // $ExpectError
 h("button", { onclick: AddSomeMore }, text("add event?!"))
 
-// $ExpectType VDOM<AppState>
+// $ExpectType VDOM<AppState, unknown>
 h("button", { onclick: [AddSomeMore, 32] }, text("add 32"))
 
-// TODO:
 // $ExpectError
 h("button", { onclick: [AddSomeMore, "foo"] }, text("add string?!"))
 

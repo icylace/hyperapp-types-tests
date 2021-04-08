@@ -6,10 +6,10 @@ declare module "hyperapp" {
   function app<S>(props: App<S>): Dispatch<S>
 
   // `h()` builds a virtual DOM node.
-  function h<S, T extends string = string>(
+  function h<S, C = unknown, T extends string = string>(
     // Tags cannot be empty strings.
     tag: T extends "" ? never : T,
-    props: PropList<S>,
+    props: PropList<S, C>,
     children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
   ): VDOM<S>
 
@@ -28,15 +28,30 @@ declare module "hyperapp" {
 
   // ---------------------------------------------------------------------------
 
+  // This lets you use a version of `h` which assumes your particular app state.
+  interface TypedH<S, C = unknown> {
+    <_, T extends string = string>(
+      tag: T extends "" ? never : T,
+      props: PropList<S, C>,
+      children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
+    ): VDOM<S>
+  }
+
+  // ---------------------------------------------------------------------------
+
+  // This utility type requires every property of an object or none at all.
+  // `App` uses this to make sure `view:` always appears alongside `node:`.
+  type AllOrNothing<T> = T | { [K in keyof T]?: never }
+
   // This utility type ensures at least one property in an object is present.
   // `App` uses this to conveniently mark `app({})` as invalid because that
   // is basically a fancy no-op.
   type AtLeastOne<T> = { [K in keyof T]: Pick<T, K> }[keyof T]
   // Credit: https://stackoverflow.com/a/59987826/1935675
 
-  // This utility type requires every property of an object or none at all.
-  // `App` uses this to make sure `view:` always appears alongside `node:`.
-  type AllOrNothing<T> = T | { [K in keyof T]?: never }
+  // We can differentiate plain objects from arrays and strings by disallowing
+  // numerical indexing. This is used in `StyleProp`.
+  type IndexableNonString = { [_: number]: never }
 
   // ---------------------------------------------------------------------------
 
@@ -70,9 +85,9 @@ declare module "hyperapp" {
   type Subscription<S, D = any> = [Subscriber<S, D>, Payload<D>]
 
   // A subscriber reacts to subscription updates.
-  type Subscriber<S, D> = (
+  type Subscriber<S, P> = (
     dispatch: Dispatch<S>,
-    payload?: Payload<D>
+    payload: Payload<P>
   ) => void | Unsubscribe
 
   // An unsubscribe function cleans up a canceled subscription.
@@ -97,7 +112,7 @@ declare module "hyperapp" {
   // A transform carries out the transition from one state to another.
   type Transform<S, P = any> = (
     state: State<S> | StateWithEffects<S>,
-    payload?: Payload<P>
+    payload: Payload<P>
   ) => State<S> | StateWithEffects<S>
 
   // Application state is accessible in every view, action, and subscription.
@@ -113,9 +128,9 @@ declare module "hyperapp" {
   type Effect<S, D = any> = [Effecter<S, D>, Payload<D>]
 
   // An effecter is where side effects and any additional dispatching may occur.
-  type Effecter<S, D> = (
+  type Effecter<S, P> = (
     dispatch: Dispatch<S>,
-    payload?: Payload<D>
+    payload: Payload<P>
   ) => void | Promise<void>
 
   // A payload is data given to an action, effect, or subscription.
@@ -124,14 +139,14 @@ declare module "hyperapp" {
   // ---------------------------------------------------------------------------
 
   // A virtual DOM node represents an actual DOM element.
-  type VDOM<S> = {
+  type VDOM<S, C = unknown> = {
     readonly type: VDOMNodeType
-    readonly props: PropList<S>
+    readonly props: PropList<S, C>
     readonly children: MaybeVDOM<S>[]
     node: null | undefined | Node
     readonly tag: Tag<S>
     readonly key: Key
-    memo?: PropList<S>
+    memo?: PropList<S, C>
     events?: Record<string, Action<S>>
 
     // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
@@ -160,18 +175,18 @@ declare module "hyperapp" {
   type Key = string | null | undefined
 
   // Virtual DOM properties will often correspond to HTML attributes.
-  type PropList<S> = Readonly<
+  type PropList<S, C> = Readonly<
     ElementCreationOptions &
-      EventActions<S> & {
-        [_: string]: unknown
-        class?: ClassProp
-        key?: Key
-        style?: StyleProp
+    EventActions<S, C> & {
+      [_: string]: unknown
+      class?: ClassProp
+      key?: Key
+      style?: StyleProp
 
-        // By disallowing `_VDOM` we ensure that values having the `VDOM` type are
-        // not mistaken for also having `PropList`.
-        _VDOM?: never
-      }
+      // By disallowing `_VDOM` we ensure that values having the `VDOM` type
+      // are not mistaken for also having `PropList`.
+      _VDOM?: never
+    }
   >
 
   // The `class` property represents an HTML class attribute string.
@@ -191,19 +206,18 @@ declare module "hyperapp" {
   // TypeScript's CSS property definitions. The trade-off doesn't
   // seem worth it given the chances of using such properties.
   // However, you can use type casting if you want to them.
-  type StyleProp = {
+  type StyleProp = IndexableNonString & {
     [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
-  } & // Since strings are indexable we can avoid them by preventing indexing.
-  { [_: number]: never }
+  }
 
   // Event handlers are implemented using actions.
-  type EventActions<S> = {
-    [K in keyof EventsMap]?: Action<S, EventsMap[K]> | ActionWithPayload<S, any>
+  type EventActions<S, C> = {
+    [K in keyof EventsMap]?: Action<S, EventsMap[K]> | ActionWithPayload<S, C>
   }
-  type EventsMap = {
-    [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K]
-  } &
-    { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] } & {
-      onsearch: Event
-    }
+
+  // prettier-ignore
+  type EventsMap
+    = { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
+    & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }
+    & { onsearch: Event }
 }
