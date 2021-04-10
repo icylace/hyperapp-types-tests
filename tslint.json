@@ -12,6 +12,7 @@
     "semicolon": false,
 
     "no-const-enum": false,
+    "no-construct": false,
     "no-duplicate-imports": false,
     "no-single-declare-module": false,
     "no-unnecessary-generics": false,

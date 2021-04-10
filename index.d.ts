@@ -43,15 +43,15 @@ declare module "hyperapp" {
   // `App` uses this to make sure `view:` always appears alongside `node:`.
   type AllOrNothing<T> = T | { [K in keyof T]?: never }
 
-  // This utility type ensures at least one property in an object is present.
-  // `App` uses this to conveniently mark `app({})` as invalid because that
-  // is basically a fancy no-op.
+  // This utility type ensures at least one property in an object to be present.
+  // `App` uses this to conveniently invalidate `app({})` because that is
+  // basically a fancy no-op.
   type AtLeastOne<T> = { [K in keyof T]: Pick<T, K> }[keyof T]
   // Credit: https://stackoverflow.com/a/59987826/1935675
 
-  // We can differentiate plain objects from arrays and strings by disallowing
-  // numerical indexing. This is used in `StyleProp`.
-  type IndexableNonString = { [_: number]: never }
+  // This utility type validates plain objects while invalidating array objects
+  // and string objects by disallowing numerical indexing. Used by `StyleProp`.
+  type IndexableByKey = Record<number, never>
 
   // ---------------------------------------------------------------------------
 
@@ -63,7 +63,7 @@ declare module "hyperapp" {
       node: Node
     } |
     AtLeastOne<{
-      init: State<S> | StateWithEffects<S> | Action<S>
+      init: Dispatchable<S>
       subscriptions: Subscriptions<S>
       dispatch: DispatchInitializer<S>
     }> &
@@ -74,21 +74,18 @@ declare module "hyperapp" {
   >
 
   // A view builds a virtual DOM node representation of the application state.
-  type View<S> = (state: State<S>) => VDOM<S>
+  type View<S> = (state: S) => VDOM<S>
 
   // The subscriptions function manages a set of subscriptions.
   type Subscriptions<S> = (
-    state: State<S>
+    state: S
   ) => (boolean | undefined | Subscription<S> | Unsubscribe)[]
 
   // A subscription represents subscriber activity.
-  type Subscription<S, D = any> = [Subscriber<S, D>, Payload<D>]
+  type Subscription<S, P = any> = [subscriber: Subscriber<S, P>, payload: P]
 
   // A subscriber reacts to subscription updates.
-  type Subscriber<S, P> = (
-    dispatch: Dispatch<S>,
-    payload: Payload<P>
-  ) => void | Unsubscribe
+  type Subscriber<S, P> = (dispatch: Dispatch<S>, payload: P) => void | Unsubscribe
 
   // An unsubscribe function cleans up a canceled subscription.
   type Unsubscribe = () => void
@@ -99,42 +96,36 @@ declare module "hyperapp" {
   // ---------------------------------------------------------------------------
 
   // A dispatched action handles an event in the context of the current state.
-  type Dispatch<S> = (action: Action<S>, payload?: Payload<any>) => void
+  type Dispatch<S> = (action: Action<S>, payload?: any) => void
+
+  // A dispatchable entity, when processed, causes a state transition.
+  type Dispatchable<S> = S | StateWithEffects<S> | Action<S>
 
   // An action transforms existing state and/or wraps another action.
   type Action<S, P = any> = ActionTransform<S, P> | ActionWithPayload<S, P>
-  type ActionTransform<S, P = any> = (
-    state: State<S>,
-    payload: Payload<P>
-  ) => State<S> | StateWithEffects<S> | Action<S>
-  type ActionWithPayload<S, P> = [ActionTransform<S, P>, Payload<P>]
+  type ActionTransform<S, P = any> = (state: S, payload: P) => Dispatchable<S>
+  type ActionWithPayload<S, P> = [action: ActionTransform<S, P>, payload: P]
 
   // A transform carries out the transition from one state to another.
   type Transform<S, P = any> = (
-    state: State<S> | StateWithEffects<S>,
-    payload: Payload<P>
-  ) => State<S> | StateWithEffects<S>
+    state: S | StateWithEffects<S>,
+    payload: P
+  ) => S | StateWithEffects<S>
 
   // Application state is accessible in every view, action, and subscription.
   type State<S> = S
 
   // State can be associated with a list of effects to run.
-  type StateWithEffects<S, D = any> = [State<S>, ...Effect<S, D>[]]
-
-  // It is often convenient to abstract away effect preparation.
-  type EffectCreator<S, D = any> = (..._: any[]) => Effect<S, D>
+  type StateWithEffects<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
 
   // An effect is an abstraction over an impure process.
-  type Effect<S, D = any> = [Effecter<S, D>, Payload<D>]
+  type Effect<S, P = any> = [effecter: Effecter<S, P>, payload: P]
 
   // An effecter is where side effects and any additional dispatching may occur.
   type Effecter<S, P> = (
     dispatch: Dispatch<S>,
-    payload: Payload<P>
+    payload: P
   ) => void | Promise<void>
-
-  // A payload is data given to an action, effect, or subscription.
-  type Payload<P> = P
 
   // ---------------------------------------------------------------------------
 
@@ -150,9 +141,9 @@ declare module "hyperapp" {
     events?: Record<string, Action<S>>
 
     // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
-    // apart from `PropList` objects. Since users are not expected to manually
-    // create their own VDOM elements, we can take advantage of this
-    // TypeScript-specific trick without forcing the user to do
+    // apart from `PropList` objects. Since we don't expect users to manually
+    // create their own VNodes, we can take advantage of this trick that's
+    // specific to TypeScript without forcing the user to do
     // anything different.
     _VDOM: true
   }
@@ -206,7 +197,7 @@ declare module "hyperapp" {
   // TypeScript's CSS property definitions. The trade-off doesn't
   // seem worth it given the chances of using such properties.
   // However, you can use type casting if you want to them.
-  type StyleProp = IndexableNonString & {
+  type StyleProp = IndexableByKey & {
     [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
   }
 
@@ -215,7 +206,7 @@ declare module "hyperapp" {
     [K in keyof EventsMap]?: Action<S, EventsMap[K]> | ActionWithPayload<S, C>
   }
 
-  // prettier-ignore
+  // Most event typings are provided by TypeScript itself.
   type EventsMap
     = { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
     & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }

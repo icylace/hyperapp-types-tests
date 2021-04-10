@@ -3,33 +3,34 @@ import {
   Dispatch,
   DispatchInitializer,
   Effect,
-  EffectCreator,
   State,
   StateWithEffects,
   Subscriptions,
   View,
 } from "hyperapp"
 
-import { app, h, text } from "hyperapp"
+import { h, text, app } from "hyperapp"
 
-app()             // $ExpectError
-app(true)         // $ExpectError
-app(false)        // $ExpectError
-app(0)            // $ExpectError
-app(2424)         // $ExpectError
-app(-123)         // $ExpectError
-app(-Infinity)    // $ExpectError
-app(Infinity)     // $ExpectError
-app(NaN)          // $ExpectError
-app("")           // $ExpectError
-app("hi")         // $ExpectError
-app({})           // $ExpectError
-app(new Set())    // $ExpectError
-app([])           // $ExpectError
-app(Symbol())     // $ExpectError
-app(() => { })    // $ExpectError
-app(null)         // $ExpectError
-app(undefined)    // $ExpectError
+app()                    // $ExpectError
+app(true)                // $ExpectError
+app(false)               // $ExpectError
+app(0)                   // $ExpectError
+app(2424)                // $ExpectError
+app(-123)                // $ExpectError
+app(-Infinity)           // $ExpectError
+app(Infinity)            // $ExpectError
+app(NaN)                 // $ExpectError
+app("")                  // $ExpectError
+app("hi")                // $ExpectError
+app(new String(""))      // $ExpectError
+app(new String("hi"))    // $ExpectError
+app({})                  // $ExpectError
+app(new Set())           // $ExpectError
+app([])                  // $ExpectError
+app(Symbol())            // $ExpectError
+app(() => { })           // $ExpectError
+app(null)                // $ExpectError
+app(undefined)           // $ExpectError
 
 // -----------------------------------------------------------------------------
 
@@ -83,9 +84,9 @@ app<string>({
 
 // -----------------------------------------------------------------------------
 
-const runTestFx = <S>(dispatch: Dispatch<S>): void => console.log("test")
+const runTestFx = (_dispatch: Dispatch<any>) => console.log("test")
 
-const testFx: EffectCreator<Test> = () => [runTestFx, undefined]
+const testFx = (): Effect<Test> => [runTestFx, undefined]
 
 // -----------------------------------------------------------------------------
 

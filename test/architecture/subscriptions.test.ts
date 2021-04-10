@@ -1,4 +1,4 @@
-import type { Dispatch, Payload, State, Unsubscribe } from "hyperapp"
+import type { Dispatch, State, Unsubscribe } from "hyperapp"
 
 import { app, h, text } from "hyperapp"
 
@@ -8,7 +8,7 @@ type Test = {
   stopping: boolean
 }
 
-const onKey = (...keys: string[]) => <S>(dispatch: Dispatch<S>, payload: Payload<any>): Unsubscribe => {
+const onKey = (...keys: string[]) => <S>(dispatch: Dispatch<S>, payload: any): Unsubscribe => {
   const listener = (event: KeyboardEvent) => {
     if (keys.includes(event.key)) {
       window.requestAnimationFrame(() => dispatch(payload.action))

@@ -1,4 +1,4 @@
-import type { Dispatch, EffectCreator, Payload, State, StateWithEffects } from "hyperapp"
+import type { Dispatch, Effect, State, StateWithEffects } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
@@ -20,11 +20,11 @@ app<Test>({
 
 // -----------------------------------------------------------------------------
 
-const runJustEcho = (_dispatch: Dispatch<Test>, data?: Payload<string>): void => {
+const runJustEcho = (_dispatch: Dispatch<Test>, data: string): void => {
   console.log(data)
 }
 
-const justEcho: EffectCreator<Test, string> = (x) => [runJustEcho, x]
+const justEcho = (x: string): Effect<Test, string> => [runJustEcho, x]
 
 // $ExpectType Dispatch<Test>
 app<Test>({
@@ -42,7 +42,7 @@ app<Test>({
 app<Test>({
   init: { x: 2, y: 4 },
   view: (state) => h("button", {
-    onclick: (state: State<Test>): StateWithEffects<Test> => [
+    onclick: (state) => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
