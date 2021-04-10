@@ -1,4 +1,4 @@
-import type { Dispatch, State, Unsubscribe } from "hyperapp"
+import type { Dispatch, Unsubscribe } from "hyperapp"
 
 import { app, h, text } from "hyperapp"
 
@@ -18,8 +18,8 @@ const onKey = (...keys: string[]) => <S>(dispatch: Dispatch<S>, payload: any): U
   return () => document.removeEventListener("keydown", listener)
 }
 
-const Decrease = (state: State<Test>) => ({ ...state, foo: state.foo - 1 })
-const Increase = (state: State<Test>) => ({ ...state, foo: state.foo + 1 })
+const Decrease = (state: Test) => ({ ...state, foo: state.foo - 1 })
+const Increase = (state: Test) => ({ ...state, foo: state.foo + 1 })
 
 // $ExpectType Dispatch<Test>
 app<Test>({

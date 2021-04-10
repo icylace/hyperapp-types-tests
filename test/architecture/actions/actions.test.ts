@@ -1,4 +1,4 @@
-import type { Dispatch, Effect, State, StateWithEffects } from "hyperapp"
+import type { Dispatch, Effect, StateWithEffects } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
@@ -54,7 +54,7 @@ app<Test>({
 app<Test>({
   init: { x: 2, y: 4 },
   view: (state) => h("button", {
-    onkeypress: (state: State<Test>): StateWithEffects<Test> => [
+    onkeypress: (state: Test): StateWithEffects<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
@@ -82,11 +82,11 @@ app<Test>({
 app<Test>({
   init: { x: 2, y: 4 },
   view: (state) => h("button", {
-    onclick: (state: State<Test>): StateWithEffects<Test> => [
+    onclick: (state: Test): StateWithEffects<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
-    onkeypress: (state: State<Test>): StateWithEffects<Test> => [
+    onkeypress: (state: Test): StateWithEffects<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
@@ -98,7 +98,7 @@ app<Test>({
 
 type Foo = { foo: number }
 
-const AddSome = (state: State<Foo>, amount: number): State<Foo> =>
+const AddSome = (state: Foo, amount: number): Foo =>
   ({ ...state, foo: state.foo + amount })
 
 // $ExpectType Dispatch<Foo>

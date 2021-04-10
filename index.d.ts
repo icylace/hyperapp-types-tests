@@ -30,7 +30,7 @@ declare module "hyperapp" {
 
   // This lets you use a version of `h` which assumes your particular app state.
   interface TypedH<S, C = unknown> {
-    <_, T extends string = string>(
+    <T extends string = string>(
       tag: T extends "" ? never : T,
       props: PropList<S, C>,
       children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
@@ -111,9 +111,6 @@ declare module "hyperapp" {
     state: S | StateWithEffects<S>,
     payload: P
   ) => S | StateWithEffects<S>
-
-  // Application state is accessible in every view, action, and subscription.
-  type State<S> = S
 
   // State can be associated with a list of effects to run.
   type StateWithEffects<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
