@@ -107,9 +107,14 @@ const toShape6 = (shape: ShapeType) => {
   return hh("h3", {}, [text(shape.type)])
 }
 
-const toShape62 = (shape: ShapeType) => {
+const toShape61 = (shape: ShapeType) => {
   // $ExpectError
   return hh<State>("h3", {}, [text(shape.type)])
+}
+
+const toShape62 = (shape: ShapeType) => {
+  // $ExpectError
+  return hh<"h3">("h3", {}, [text(shape.type)])
 }
 
 // $ExpectType Dispatch<State>

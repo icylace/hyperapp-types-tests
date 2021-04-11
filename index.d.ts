@@ -30,7 +30,7 @@ declare module "hyperapp" {
 
   // This lets you use a version of `h` which assumes your particular app state.
   interface TypedH<S, C = unknown> {
-    <T extends string = string>(
+    <_ extends never, T extends string = string>(
       tag: T extends "" ? never : T,
       props: PropList<S, C>,
       children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
