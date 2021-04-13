@@ -1,10 +1,10 @@
 import {
-  App,
+  Action,
+  ActionWithPayload,
   Dispatch,
   Dispatchable,
   DispatchInitializer,
   Effect,
-  Reaction,
   Subscriptions,
   View,
 } from "hyperapp"
@@ -172,7 +172,7 @@ const myTimeout = <S>(dispatch: Dispatch<S>, props: any) => {
 const myDelay = <S>(delay: number, action: Dispatchable<S>): Effect<S> =>
   [myTimeout, { delay, action }]
 
-const IncrementFoo: Reaction<Test> = (state) =>
+const IncrementFoo: Action<Test> = (state) =>
   ({ ...state, foo: state.foo + 1 })
 
 // $ExpectType Dispatch<Test>
