@@ -1,6 +1,5 @@
 import {
   Action,
-  ActionWithPayload,
   Dispatch,
   Dispatchable,
   DispatchInitializer,
