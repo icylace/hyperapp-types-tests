@@ -1,9 +1,10 @@
 import {
-  Action,
+  App,
   Dispatch,
   Dispatchable,
   DispatchInitializer,
   Effect,
+  Reaction,
   Subscriptions,
   View,
 } from "hyperapp"
@@ -36,7 +37,6 @@ app(undefined)           // $ExpectError
 type Test = { bar?: number, foo: number }
 
 const init: Test = { foo: 0 }
-// const init: State<Test> = { foo: 0 }
 const view: View<Test> = text
 const node: Node = document.body
 const subscriptions: Subscriptions<Test> = (_) => []
@@ -172,7 +172,7 @@ const myTimeout = <S>(dispatch: Dispatch<S>, props: any) => {
 const myDelay = <S>(delay: number, action: Dispatchable<S>): Effect<S> =>
   [myTimeout, { delay, action }]
 
-const IncrementFoo: Action<Test> = (state) =>
+const IncrementFoo: Reaction<Test> = (state) =>
   ({ ...state, foo: state.foo + 1 })
 
 // $ExpectType Dispatch<Test>

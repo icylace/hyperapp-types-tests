@@ -20,17 +20,7 @@
 
 /**
  * @template S, D
- * @typedef { import("hyperapp").EffectCreator<S, D> } EffectCreator
- */
-
-/**
- * @template S, D
  * @typedef { import("hyperapp").Effect<S, D> } Effect
- */
-
-/**
- * @template S
- * @typedef { import("hyperapp").State<S> } State
  */
 
 /**
@@ -73,7 +63,7 @@ import { app, h, text } from "hyperapp"
  */
 const runTestFx = (dispatch) => console.log("test")
 
-/** @type {EffectCreator<Test, any>} */
+/** @type {() => [(_: any) => void, undefined]} */
 const testFx = () => [runTestFx, undefined]
 
 app({
@@ -177,7 +167,7 @@ const myTimeout = (dispatch, props) => {
 /**
  * @template S
  * @param {number} delay
- * @param {State<S> | StateWithEffects<S> | Action<S, any>} action
+ * @param {S | StateWithEffects<S> | Action<S, any>} action
  * @returns {Effect<S, any>}
  */
 const myDelay = (delay, action) =>

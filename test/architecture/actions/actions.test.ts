@@ -125,11 +125,11 @@ h("button", { onclick: [AddSome, "foo"] }, text("add string?!"))
 
 // -----------------------------------------------------------------------------
 
-import { ActionTransform } from "hyperapp"
+import { Action } from "hyperapp"
 
 type AppState = { foo: number }
 
-const AddSomeMore: ActionTransform<AppState, number> =
+const AddSomeMore: Action<AppState, number> =
   (state, amount) => ({
     ...state,
     foo: state.foo + (amount || 0),

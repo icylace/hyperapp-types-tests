@@ -62,20 +62,19 @@ h(() => { }, {})           // $ExpectError
 h(null, {})                // $ExpectError
 h(undefined, {})           // $ExpectError
 
-h<number>(true, {})         // $ExpectError
-h<number>(false, {})        // $ExpectError
-h<number>(0, {})            // $ExpectError
-h<number>(2424, {})         // $ExpectError
-h<number>(-123, {})         // $ExpectError
-h<number>(-Infinity, {})    // $ExpectError
-h<number>(Infinity, {})     // $ExpectError
-h<number>(NaN, {})          // $ExpectError
+h<number>(true, {})                // $ExpectError
+h<number>(false, {})               // $ExpectError
+h<number>(0, {})                   // $ExpectError
+h<number>(2424, {})                // $ExpectError
+h<number>(-123, {})                // $ExpectError
+h<number>(-Infinity, {})           // $ExpectError
+h<number>(Infinity, {})            // $ExpectError
+h<number>(NaN, {})                 // $ExpectError
 
 // TODO:
-h<number>("", {})           // $ExpectError
+h<number>("", {})                  // $ExpectError
 
 h<number>(new String(""), {})      // $ExpectError
-
 h<number>("hi", {})                // $ExpectType VDOM<number, unknown>
 h<number>(new String("hi"), {})    // $ExpectError
 h<number>({}, {})                  // $ExpectError
