@@ -19,7 +19,7 @@
  */
 
 /**
- * @template S, D
+ * @template S, P
  * @typedef { import("hyperapp").Effect<S, P> } Effect
  */
 
