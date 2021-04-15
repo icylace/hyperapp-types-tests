@@ -117,7 +117,7 @@ app<Foo>({ init: [AddSome, 42] })
 // $ExpectError
 h("button", { onclick: AddSome }, text("add event?!"))
 
-// $ExpectType VDOM<Foo, unknown>
+// $ExpectType VDOM<Foo>
 h("button", { onclick: [AddSome, 32] }, text("add 32"))
 
 // $ExpectError
@@ -138,7 +138,7 @@ const AddSomeMore: Action<AppState, number> =
 // $ExpectError
 h("button", { onclick: AddSomeMore }, text("add event?!"))
 
-// $ExpectType VDOM<AppState, unknown>
+// $ExpectType VDOM<AppState>
 h("button", { onclick: [AddSomeMore, 32] }, text("add 32"))
 
 // $ExpectError
@@ -166,3 +166,41 @@ app<LocalState>({
       }),
     ]),
 })
+
+// -----------------------------------------------------------------------------
+
+// Credit: https://github.com/jorgebucaran/hyperapp/pull/1047#discussion_r612749398
+
+type State = {
+  foo: number
+  name: string
+}
+
+const AddFoo: Action<State, number> = (state, amount) => ({...state, foo: state.foo + amount})
+const SetName: Action<State, string> = (state, name) => ({...state, name})
+
+// $ExpectType VDOM<State>
+h("div", {
+  onmousedown: [AddFoo, 32],
+  onmouseup: [SetName, "unknown"],
+})
+
+// -----------------------------------------------------------------------------
+
+h("div", {
+  onmousedown: [AddFoo, 32],
+  onmouseenter: (state: State, payload: MouseEvent) => state,
+  // $ExpectError
+  onmousemove: (state: State, payload: number) => state,
+  // $ExpectError
+  onclick: [AddFoo, "unknown"],
+  onmouseup: [SetName, "unknown"],
+  // $ExpectError
+  onmouseleave: [SetName, 32],
+})
+
+// $ExpectType VDOM<State>
+h("div", { onmouseenter: (state: State, payload: MouseEvent) => state })
+
+// $ExpectError
+h("div", { onmouseenter: (state: State, payload: number) => state })

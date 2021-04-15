@@ -5,14 +5,6 @@ const runEcho = (dispatch: Dispatch<string>, data: string): void => {
   dispatch((state, x) => state + x, data)
 }
 
-// TODO:
-// - remove `EffectCreator` if possible
-// - write more type tests, especially for effects and subscriptions
-// - consolidate latest type changes into single PR
-// - test if the `_` in `TypedH` is really helpful/necessary
-//   - ultimately it might not be
-// - remove `Payload` because it doesn't do enough to justify its existence
-
 const echo = (x: string): Effect<string, string> => [runEcho, x]
 
 // $ExpectType Effect<string, string>
