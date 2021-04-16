@@ -1,6 +1,9 @@
-import type { Dispatch, Effect, StateWithEffects } from "hyperapp"
+import type { Dispatch, Effect } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
+
+// State can be associated with a list of effects to run.
+type StateWithEffects<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
 
 type Test = { x: number, y: number }
 
