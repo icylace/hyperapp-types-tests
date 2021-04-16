@@ -299,6 +299,18 @@ h<number>("p", { class: [true || "foo"] })     // $ExpectType VDOM<number>
 
 // -----------------------------------------------------------------------------
 
+h("p", { draggable: true })    // $ExpectType VDOM<unknown>
+h("p", { draggable: "hi" })    // $ExpectError
+h("p", { draggable: 42 })      // $ExpectError
+
+h("p", { id: "hi" })    // $ExpectType VDOM<unknown>
+h("p", { id: 42 })      // $ExpectError
+
+h("p", { tabIndex: "hi" })    // $ExpectError
+h("p", { tabIndex: 42 })      // $ExpectType VDOM<unknown>
+
+// -----------------------------------------------------------------------------
+
 h("p", { style: true })                // $ExpectError
 h("p", { style: false })               // $ExpectError
 h("p", { style: 0 })                   // $ExpectError
