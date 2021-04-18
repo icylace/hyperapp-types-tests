@@ -20,3 +20,29 @@ text(Symbol())            // $ExpectError
 text(() => { })           // $ExpectError
 text(null)                // $ExpectType VDOM<unknown>
 text(undefined)           // $ExpectType VDOM<unknown>
+
+text<number>()                    // $ExpectError
+text<number>(true)                // $ExpectType VDOM<number>
+text<number>(false)               // $ExpectType VDOM<number>
+text<number>(0)                   // $ExpectType VDOM<number>
+text<number>(2424)                // $ExpectType VDOM<number>
+text<number>(-123)                // $ExpectType VDOM<number>
+text<number>(-Infinity)           // $ExpectType VDOM<number>
+text<number>(Infinity)            // $ExpectType VDOM<number>
+text<number>(NaN)                 // $ExpectType VDOM<number>
+text<number>("")                  // $ExpectType VDOM<number>
+text<number>("hi")                // $ExpectType VDOM<number>
+text<number>(new String(""))      // $ExpectType VDOM<number>
+text<number>(new String("hi"))    // $ExpectType VDOM<number>
+text<number>({})                  // $ExpectType VDOM<number>
+text<number>(new Set())           // $ExpectType VDOM<number>
+text<number>([])                  // $ExpectType VDOM<number>
+
+// TODO:
+text<number>(Symbol())            // $ExpectError
+
+// TODO:
+text<number>(() => { })           // $ExpectError
+
+text<number>(null)                // $ExpectType VDOM<number>
+text<number>(undefined)           // $ExpectType VDOM<number>

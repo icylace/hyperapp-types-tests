@@ -1,4 +1,4 @@
-import { Dispatch, Effect } from "hyperapp"
+import type { Dispatch, Effect } from "hyperapp"
 
 const runEcho = (dispatch: Dispatch<string>, data: string): void => {
   console.log(data)

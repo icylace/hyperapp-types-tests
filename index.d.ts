@@ -14,15 +14,18 @@ declare module "hyperapp" {
   ): VDOM<S>
 
   // `memo()` stores a view along with any given data for it.
-  function memo<S, D extends string | any[] | Record<string, any>>(
-    view: View<D>,
-    data: D
-  ): VDOM<S>
+  function memo<
+    S,
+    D extends string | unknown[] | Record<string, any> =
+      | string
+      | unknown[]
+      | Record<string, any>
+  >(view: View<D>, data: D): VDOM<S>
 
   // `text()` creates a virtual DOM node representing plain text.
   function text<S, T = unknown>(
-    // While most values can be stringified, symbols and functions cannot.
-    value: T extends symbol | ((..._: any[]) => any) ? never : T
+    // While most values can be used, symbols and functions cannot.
+    value: T extends symbol | ((..._: unknown[]) => unknown) ? never : T
   ): VDOM<S>
 
   // ---------------------------------------------------------------------------
@@ -84,12 +87,15 @@ declare module "hyperapp" {
   type View<S> = (state: S) => VDOM<S>
 
   // The subscriptions function manages a set of subscriptions.
-  type Subscriptions<S> = (
-    state: S
-  ) => (boolean | undefined | Subscription<S> | Unsubscribe)[]
+  type Subscriptions<S> = (state: S) => (
+    | boolean
+    | undefined
+    | Subscription<S>
+    | Unsubscribe
+  )[]
 
   // A subscription reacts to external activity.
-  type Subscription<S, P = any> = [
+  type Subscription<S, P = unknown> = [
     subscriber: (dispatch: Dispatch<S>, payload: P) => void | Unsubscribe,
     payload: P
   ]
@@ -103,7 +109,7 @@ declare module "hyperapp" {
   // ---------------------------------------------------------------------------
 
   // A dispatched action handles an event in the context of the current state.
-  type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: any) => void
+  type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: unknown) => void
 
   // A dispatchable entity, when processed, causes a state transition.
   type Dispatchable<S, P = any> =
@@ -116,7 +122,7 @@ declare module "hyperapp" {
   type Action<S, P = any> = (state: S, payload: P) => Dispatchable<S>
 
   // An effect is where side effects and any additional dispatching may occur.
-  type Effect<S, P = any> = [
+  type Effect<S, P = unknown> = [
     effecter: (dispatch: Dispatch<S>, payload: P) => void | Promise<void>,
     payload: P
   ]
@@ -132,7 +138,7 @@ declare module "hyperapp" {
     readonly tag: Tag<S>
     readonly key: Key
     memo?: PropList<S>
-    events?: Record<string, Action<S> | [action: Action<S>, payload: any]>
+    events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
 
     // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
     // apart from `PropList` objects. Since we don't expect users to manually
@@ -161,8 +167,8 @@ declare module "hyperapp" {
 
   // Virtual DOM properties will often correspond to HTML attributes.
   type PropList<S> = Readonly<
-    | Partial<Omit<HTMLElement, keyof (
-      | DocumentAndElementEventHandlers
+    & Partial<Omit<HTMLElement, keyof (
+      & DocumentAndElementEventHandlers
       & ElementCSSInlineStyle
       & GlobalEventHandlers
     )>>
@@ -205,12 +211,12 @@ declare module "hyperapp" {
   type EventActions<S> = {
     [K in keyof EventsMap]?:
       | Action<S, EventsMap[K]>
-      | [action: Action<S>, payload: any]
+      | [action: Action<S>, payload: unknown]
   }
 
   // Most event typings are provided by TypeScript itself.
   type EventsMap =
-    | { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
+    & { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
     & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }
     & { onsearch: Event }
 }

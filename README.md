@@ -1,8 +1,6 @@
 # Hyperapp Types Tests
 
-This is the [dtslint](https://github.com/microsoft/dtslint)-based types test suite for the [TypeScript](https://www.typescriptlang.org/) definitions used in [Hyperapp](https://hyperapp.dev/). A copy of the type definitions is kept here for the testing.
-
-> STATUS: The type definition kept here is the one currently proposed in https://github.com/jorgebucaran/hyperapp/pull/1051
+This is the [dtslint](https://github.com/microsoft/dtslint)-based types test suite for the [TypeScript](https://www.typescriptlang.org/) definitions used in [Hyperapp](https://hyperapp.dev/). A copy of the type definitions is kept here for the testing and may also include proposed changes.
 
 ## Setup & Usage
 

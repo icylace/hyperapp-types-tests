@@ -1,6 +1,7 @@
 // Credit: https://github.com/jorgebucaran/hyperapp/issues/1048
 
-import { TypedH, View } from "hyperapp"
+import type { TypedH, View } from "hyperapp"
+
 import { h, text, app } from "hyperapp"
 
 type ShapeType = { type: string }

@@ -23,12 +23,7 @@
  * @typedef { import("hyperapp").Effect<S, P> } Effect
  */
 
-/**
- * @template S
- * @typedef { import("hyperapp").StateWithEffects<S> } StateWithEffects
- */
-
-import { app, h, text } from "hyperapp"
+import { h, text, app } from "hyperapp"
 
 // The following are erroneous:
 //
@@ -167,7 +162,7 @@ const myTimeout = (dispatch, props) => {
 /**
  * @template S
  * @param {number} delay
- * @param {S | StateWithEffects<S> | Action<S, any>} action
+ * @param {S | [S, ...Effect<S, any>[]] | Action<S, any>} action
  * @returns {Effect<S, any>}
  */
 const myDelay = (delay, action) =>

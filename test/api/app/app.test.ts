@@ -1,4 +1,4 @@
-import {
+import type {
   Action,
   Dispatch,
   Dispatchable,
@@ -30,6 +30,27 @@ app(Symbol())            // $ExpectError
 app(() => { })           // $ExpectError
 app(null)                // $ExpectError
 app(undefined)           // $ExpectError
+
+app<number>()                    // $ExpectError
+app<number>(true)                // $ExpectError
+app<number>(false)               // $ExpectError
+app<number>(0)                   // $ExpectError
+app<number>(2424)                // $ExpectError
+app<number>(-123)                // $ExpectError
+app<number>(-Infinity)           // $ExpectError
+app<number>(Infinity)            // $ExpectError
+app<number>(NaN)                 // $ExpectError
+app<number>("")                  // $ExpectError
+app<number>("hi")                // $ExpectError
+app<number>(new String(""))      // $ExpectError
+app<number>(new String("hi"))    // $ExpectError
+app<number>({})                  // $ExpectError
+app<number>(new Set())           // $ExpectError
+app<number>([])                  // $ExpectError
+app<number>(Symbol())            // $ExpectError
+app<number>(() => { })           // $ExpectError
+app<number>(null)                // $ExpectError
+app<number>(undefined)           // $ExpectError
 
 // -----------------------------------------------------------------------------
 
@@ -71,6 +92,37 @@ app({ node, subscriptions, dispatch })                // $ExpectError
 app({ subscriptions })                                // $ExpectType Dispatch<Test>
 app({ subscriptions, dispatch })                      // $ExpectType Dispatch<Test>
 app({ dispatch })                                     // $ExpectType Dispatch<Test>
+
+app<Test>({ init })                                         // $ExpectType Dispatch<Test>
+app<Test>({ init, view })                                   // $ExpectError
+app<Test>({ init, node })                                   // $ExpectError
+app<Test>({ init, subscriptions })                          // $ExpectType Dispatch<Test>
+app<Test>({ init, dispatch })                               // $ExpectType Dispatch<Test>
+app<Test>({ init, view, node })                             // $ExpectType Dispatch<Test>
+app<Test>({ init, view, subscriptions })                    // $ExpectError
+app<Test>({ init, view, dispatch })                         // $ExpectError
+app<Test>({ init, node, subscriptions })                    // $ExpectError
+app<Test>({ init, node, dispatch })                         // $ExpectError
+app<Test>({ init, subscriptions, dispatch })                // $ExpectType Dispatch<Test>
+app<Test>({ init, view, node, subscriptions })              // $ExpectType Dispatch<Test>
+app<Test>({ init, view, node, dispatch })                   // $ExpectType Dispatch<Test>
+app<Test>({ init, view, subscriptions, dispatch })          // $ExpectError
+app<Test>({ init, node, subscriptions, dispatch })          // $ExpectError
+app<Test>({ init, view, node, subscriptions, dispatch })    // $ExpectType Dispatch<Test>
+app<Test>({ view })                                         // $ExpectError
+app<Test>({ view, node })                                   // $ExpectType Dispatch<Test>
+app<Test>({ view, subscriptions })                          // $ExpectError
+app<Test>({ view, dispatch })                               // $ExpectError
+app<Test>({ view, node, subscriptions })                    // $ExpectType Dispatch<Test>
+app<Test>({ view, node, dispatch })                         // $ExpectType Dispatch<Test>
+app<Test>({ view, node, subscriptions, dispatch })          // $ExpectType Dispatch<Test>
+app<Test>({ node })                                         // $ExpectError
+app<Test>({ node, subscriptions })                          // $ExpectError
+app<Test>({ node, dispatch })                               // $ExpectError
+app<Test>({ node, subscriptions, dispatch })                // $ExpectError
+app<Test>({ subscriptions })                                // $ExpectType Dispatch<Test>
+app<Test>({ subscriptions, dispatch })                      // $ExpectType Dispatch<Test>
+app<Test>({ dispatch })                                     // $ExpectType Dispatch<Test>
 
 // -----------------------------------------------------------------------------
 
