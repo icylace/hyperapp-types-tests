@@ -67,21 +67,22 @@ declare module "hyperapp" {
 
   // A Hyperapp instance generally has an initial state and a base view and is
   // mounted over an available DOM element.
-  type App<S> = Readonly<
-    {
-      view: View<S>
-      node: Node
-    } |
-    AtLeastOne<{
-      init: Dispatchable<S>
-      subscriptions: Subscriptions<S>
-      dispatch: DispatchInitializer<S>
-    }> &
-    AllOrNothing<{
-      view: View<S>
-      node: Node
-    }>
-  >
+  type App<S> =
+    Readonly<
+      {
+        view: View<S>
+        node: Node
+      } |
+      AtLeastOne<{
+        init: Dispatchable<S>
+        subscriptions: Subscriptions<S>
+        dispatch: DispatchInitializer<S>
+      }> &
+      AllOrNothing<{
+        view: View<S>
+        node: Node
+      }>
+    >
 
   // A view builds a virtual DOM node representation of the application state.
   type View<S> = (state: S) => VDOM<S>
@@ -166,25 +167,28 @@ declare module "hyperapp" {
   type Key = string | null | undefined
 
   // Virtual DOM properties will often correspond to HTML attributes.
-  type PropList<S> = Readonly<
-    & Partial<Omit<HTMLElement, keyof (
-      & DocumentAndElementEventHandlers
-      & ElementCSSInlineStyle
-      & GlobalEventHandlers
-    )>>
-    & ElementCreationOptions
-    & EventActions<S>
-    & {
-      [_: string]: unknown
-      class?: ClassProp
-      key?: Key
-      style?: StyleProp
+  type PropList<S> =
+    Readonly<
+      Partial<
+        Omit<HTMLElement, keyof (
+          DocumentAndElementEventHandlers &
+          ElementCSSInlineStyle &
+          GlobalEventHandlers
+        )> &
+        ElementCreationOptions &
+        EventActions<S>
+      > &
+      {
+        [_: string]: unknown
+        class?: ClassProp
+        key?: Key
+        style?: StyleProp
 
-      // By disallowing `_VDOM` we ensure that values having the `VDOM` type
-      // are not mistaken for also having `PropList`.
-      _VDOM?: never
-    }
-  >
+        // By disallowing `_VDOM` we ensure that values having the `VDOM` type
+        // are not mistaken for also having `PropList`.
+        _VDOM?: never
+      }
+    >
 
   // The `class` property represents an HTML class attribute string.
   type ClassProp =
@@ -209,7 +213,7 @@ declare module "hyperapp" {
 
   // Event handlers are implemented using actions.
   type EventActions<S> = {
-    [K in keyof EventsMap]?:
+    [K in keyof EventsMap]:
       | Action<S, EventsMap[K]>
       | [action: Action<S>, payload: unknown]
   }
