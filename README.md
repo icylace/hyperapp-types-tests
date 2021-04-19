@@ -17,6 +17,10 @@ This is the [dtslint](https://github.com/microsoft/dtslint)-based types test sui
 
 Some test cases are currently unsolved and will be shown when you run `npm test`.
 
+## Why is [dtslint](https://github.com/microsoft/dtslint) used intead of [tsd](https://github.com/SamVerschueren/tsd)?
+
+dtslint makes it convenient to have a local copy of the type definitions for testing. This is especially useful for quickly testing out experimental changes.
+
 ## Contributing
 
 New test cases are always welcome!

@@ -11,11 +11,14 @@
     "testing"
   ],
   "scripts": {
-    "test": "dtslint"
+    "clean": "./task.sh clean",
+    "reset": "./task.sh reset",
+    "test": "./task.sh test"
   },
-  "devDependencies": {
-    "dtslint": "^4.0.8",
-    "hyperapp": "^2.0.13",
-    "typescript": "^4.2.3"
+  "dependencies": {
+    "dtslint": "^4.0.9",
+    "hyperapp": "^2.0.15",
+    "tsd": "^0.14.0",
+    "typescript": "^4.2.4"
   }
 }
