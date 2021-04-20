@@ -1,6 +1,6 @@
 // Credit: https://github.com/jorgebucaran/hyperapp/issues/1048
 
-import type { TypedH, View } from "hyperapp"
+import type { TypedH, VDOM, View } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
