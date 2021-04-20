@@ -4,7 +4,7 @@
 import { h, text, Action, VDOM } from "hyperapp"
 
 type MyComponentProps<S> = {
-  foo: Action<S>,
+  foo: Action<S>
   bar: string
 }
 
@@ -16,10 +16,10 @@ type MyComponentProps<S> = {
 // to be unknown.
 
 const myComponent = <S>(props: MyComponentProps<S>) =>
-  h('div', {}, [
+  h("div", {}, [
     // $ExpectError
-    h('button', {onclick: props.foo}, text('click')),
-    h('p', {}, text(props.bar)),
+    h("button", { onclick: props.foo }, text("click")),
+    h("p", {}, text(props.bar)),
   ])
 
 // The easiest way to solve this is to explicitly
@@ -27,7 +27,7 @@ const myComponent = <S>(props: MyComponentProps<S>) =>
 
 // $ExpectType <S>(props: MyComponentProps<S>) => VDOM<S>
 const myComponent2 = <S>(props: MyComponentProps<S>): VDOM<S> =>
-  h('div', {}, [
-    h('button', {onclick: props.foo}, text('click')),
-    h('p', {}, text(props.bar)),
+  h("div", {}, [
+    h("button", { onclick: props.foo }, text("click")),
+    h("p", {}, text(props.bar)),
   ])
