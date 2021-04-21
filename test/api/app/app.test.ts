@@ -1,11 +1,9 @@
 import type {
   Action,
+  App,
   Dispatch,
   Dispatchable,
-  DispatchInitializer,
   Effect,
-  Subscriptions,
-  View,
 } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
@@ -57,10 +55,10 @@ app<number>(undefined)           // $ExpectError
 type Test = { bar?: number, foo: number }
 
 const init: Test = { foo: 0 }
-const view: View<Test> = text
+const view: App<Test>["view"] = text
 const node: Node = document.body
-const subscriptions: Subscriptions<Test> = (_) => []
-const dispatch: DispatchInitializer<Test> = (x) => x
+const subscriptions = (_state: Test) => []
+const dispatch = (dispatch: Dispatch<Test>) => dispatch
 
 app({ init })                                         // $ExpectType Dispatch<Test>
 app({ init, view })                                   // $ExpectError

@@ -1,8 +1,10 @@
 // Credit: https://github.com/jorgebucaran/hyperapp/issues/1048
 
-import type { TypedH, VDOM, View } from "hyperapp"
+import type { TypedH, VDOM } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
+
+type View<S> = (state: S) => VDOM<S>
 
 type ShapeType = { type: string }
 type State = { shapes: ShapeType[] }

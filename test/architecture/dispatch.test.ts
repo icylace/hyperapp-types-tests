@@ -1,8 +1,10 @@
-import type { Dispatch, Effect, View } from "hyperapp"
+import type { Dispatch, Effect, VDOM } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
 // -----------------------------------------------------------------------------
+
+type View<S> = (state: S) => VDOM<S>
 
 type State = { bar?: number, foo: number }
 

@@ -1,8 +1,10 @@
-import type { Action, Effect, EventsMap, View } from "hyperapp"
+import type { Action, Effect, VDOM } from "hyperapp"
 
 import { text, app } from "hyperapp"
 
 // -----------------------------------------------------------------------------
+
+type View<S> = (state: S) => VDOM<S>
 
 type State = { bar?: number, foo: number }
 
@@ -18,6 +20,3 @@ app<string>({
 })
 
 // -----------------------------------------------------------------------------
-
-// $ExpectType CustomEvent<string>
-const x: EventsMap["onsearch"] = new CustomEvent("hjgkj", { detail: "dfghfldkjg" })
