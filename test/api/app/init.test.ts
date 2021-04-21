@@ -1,6 +1,6 @@
-import type { Action, Effect, View } from "hyperapp"
+import type { Action, Effect, EventsMap, View } from "hyperapp"
 
-import { h, text, app } from "hyperapp"
+import { text, app } from "hyperapp"
 
 // -----------------------------------------------------------------------------
 
@@ -16,3 +16,8 @@ app<string>({
   view: text,
   node: document.body,
 })
+
+// -----------------------------------------------------------------------------
+
+// $ExpectType CustomEvent<string>
+const x: EventsMap["onsearch"] = new CustomEvent("hjgkj", { detail: "dfghfldkjg" })

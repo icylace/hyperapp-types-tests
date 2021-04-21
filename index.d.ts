@@ -41,30 +41,6 @@ declare module "hyperapp" {
     ): VDOM<S>
   }
 
-  // This helper for `h` lets event handling actions accept custom payloads.
-  type ValidateCustomPayloads<S, T> = {
-    [K in keyof T]?:
-      K extends "style" ? StyleProp
-      : T[K] extends [Action<S, infer P>, unknown] ? [Action<S, P>, P]
-      : T[K]
-  }
-
-  // This utility type requires every property of an object or none at all.
-  // `App` uses this to make sure `view:` always appears alongside `node:`.
-  type AllOrNothing<T> = T | { [K in keyof T]?: never }
-
-  // This utility type ensures at least one property in an object to be present.
-  // `App` uses this to conveniently invalidate `app({})` because that is
-  // basically a fancy no-op.
-  type AtLeastOne<T> = { [K in keyof T]: Pick<T, K> }[keyof T]
-  // Credit: https://stackoverflow.com/a/59987826/1935675
-
-  // This utility type validates plain objects while invalidating array objects
-  // and string objects by disallowing numerical indexing. Used by `StyleProp`.
-  type IndexableByKey = Record<number, never>
-
-  // ---------------------------------------------------------------------------
-
   // A Hyperapp instance generally has an initial state and a base view and is
   // mounted over an available DOM element.
   type App<S> =
@@ -84,16 +60,13 @@ declare module "hyperapp" {
       }>
     >
 
-  // A view builds a virtual DOM node representation of the application state.
-  type View<S> = (state: S) => VDOM<S>
-
-  // The subscriptions function manages a set of subscriptions.
-  type Subscriptions<S> = (state: S) => (
-    | boolean
-    | undefined
-    | Subscription<S>
-    | Unsubscribe
-  )[]
+  // This helper for `h` lets event handling actions accept custom payloads.
+  type ValidateCustomPayloads<S, T> = {
+    [K in keyof T]?:
+      K extends "style" ? StyleProp
+      : T[K] extends [Action<S, infer P>, unknown] ? [Action<S, P>, P]
+      : T[K]
+  }
 
   // A subscription reacts to external activity.
   type Subscription<S, P = unknown> = [
@@ -103,11 +76,6 @@ declare module "hyperapp" {
 
   // An unsubscribe function cleans up a canceled subscription.
   type Unsubscribe = () => void
-
-  // Dispatching can be augmented to do custom processing.
-  type DispatchInitializer<S> = (dispatch: Dispatch<S>) => Dispatch<S>
-
-  // ---------------------------------------------------------------------------
 
   // A dispatched action handles an event in the context of the current state.
   type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: unknown) => void
@@ -128,8 +96,6 @@ declare module "hyperapp" {
     payload: P
   ]
 
-  // ---------------------------------------------------------------------------
-
   // A virtual DOM node represents an actual DOM element.
   type VDOM<S> = {
     readonly type: VDOMNodeType
@@ -149,22 +115,8 @@ declare module "hyperapp" {
     _VDOM: true
   }
 
-  // These are based on actual DOM node types:
-  // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
-  const enum VDOMNodeType {
-    SSR = 1,
-    Text = 3,
-  }
-
   // In certain places a virtual DOM node can be made optional.
   type MaybeVDOM<S> = boolean | null | undefined | VDOM<S>
-
-  // A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes are
-  // tagged by their type to assist rendering.
-  type Tag<S> = string | View<S>
-
-  // A key can uniquely associate a virtual DOM node with a certain DOM element.
-  type Key = string | null | undefined
 
   // Virtual DOM properties will often correspond to HTML attributes.
   type PropList<S> =
@@ -190,37 +142,87 @@ declare module "hyperapp" {
       }
     >
 
-  // The `class` property represents an HTML class attribute string.
-  type ClassProp =
-    | boolean
-    | string
-    | undefined
-    | Record<string, boolean | undefined>
-    | ClassProp[]
-
-  // The `style` property represents inline CSS.
-  //
-  // NOTE: This relies on what TypeScript itself recognizes as valid CSS
-  // properties. Custom properties are not covered as well as any newer
-  // properties that are not yet recognized by TypeScript. Apparently,
-  // the only way to accommodate them is to relax the adherence to
-  // TypeScript's CSS property definitions. The trade-off doesn't
-  // seem worth it given the chances of using such properties.
-  // However, you can use type casting if you want to them.
-  type StyleProp = IndexableByKey & {
-    [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
-  }
-
   // Event handlers are implemented using actions.
   type EventActions<S> = {
     [K in keyof EventsMap]:
       | Action<S, EventsMap[K]>
       | [action: Action<S>, payload: unknown]
   }
-
-  // Most event typings are provided by TypeScript itself.
-  type EventsMap =
-    & { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
-    & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }
-    & { onsearch: Event }
 }
+
+// -----------------------------------------------------------------------------
+
+import type { Subscription, Unsubscribe } from "hyperapp"
+
+// -----------------------------------------------------------------------------
+
+// This utility type requires every property of an object or none at all.
+// `App` uses this to make sure `view:` always appears alongside `node:`.
+type AllOrNothing<T> = T | { [K in keyof T]?: never }
+
+// This utility type ensures at least one property in an object to be present.
+// `App` uses this to conveniently invalidate `app({})` because that is
+// basically a fancy no-op.
+type AtLeastOne<T> = { [K in keyof T]: Pick<T, K> }[keyof T]
+// Credit: https://stackoverflow.com/a/59987826/1935675
+
+// This utility type validates plain objects while invalidating array objects
+// and string objects by disallowing numerical indexing. Used by `StyleProp`.
+type IndexableByKey = Record<number, never>
+
+// -----------------------------------------------------------------------------
+
+// A view builds a virtual DOM node representation of the application state.
+type View<S> = (state: S) => VDOM<S>
+
+// The subscriptions function manages a set of subscriptions.
+type Subscriptions<S> = (state: S) => (
+  | boolean
+  | undefined
+  | Subscription<S>
+  | Unsubscribe
+)[]
+
+// Dispatching can be augmented to do custom processing.
+type DispatchInitializer<S> = (dispatch: Dispatch<S>) => Dispatch<S>
+
+// These are based on actual DOM node types:
+// https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+declare const enum VDOMNodeType {
+  SSR = 1,
+  Text = 3,
+}
+
+// A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes are
+// tagged by their type to assist rendering.
+type Tag<S> = string | View<S>
+
+// A key can uniquely associate a virtual DOM node with a certain DOM element.
+type Key = string | null | undefined
+
+// The `class` property represents an HTML class attribute string.
+type ClassProp =
+  | boolean
+  | string
+  | undefined
+  | Record<string, boolean | undefined>
+  | ClassProp[]
+
+// The `style` property represents inline CSS.
+//
+// NOTE: This relies on what TypeScript itself recognizes as valid CSS
+// properties. Custom properties are not covered as well as any newer
+// properties that are not yet recognized by TypeScript. Apparently,
+// the only way to accommodate them is to relax the adherence to
+// TypeScript's CSS property definitions. The trade-off doesn't
+// seem worth it given the chances of using such properties.
+// However, you can use type casting if you want to them.
+type StyleProp = IndexableByKey & {
+  [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
+}
+
+// Most event typings are provided by TypeScript itself.
+type EventsMap =
+  & { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
+  & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }
+  & { onsearch: Event }
