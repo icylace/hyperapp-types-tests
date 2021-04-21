@@ -1,10 +1,4 @@
-import type {
-  Action,
-  App,
-  Dispatch,
-  Dispatchable,
-  Effect,
-} from "hyperapp"
+import type { Action, App, Dispatch, Dispatchable, Effect } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
