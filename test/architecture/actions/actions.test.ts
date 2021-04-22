@@ -1,4 +1,4 @@
-import type { Dispatch, Effect } from "hyperapp"
+import type { Action, Dispatch, Effect } from "hyperapp"
 
 import { h, text, app } from "hyperapp"
 
@@ -127,8 +127,6 @@ h("button", { onclick: [AddSome, 32] }, text("add 32"))
 h("button", { onclick: [AddSome, "foo"] }, text("add string?!"))
 
 // -----------------------------------------------------------------------------
-
-import { Action } from "hyperapp"
 
 type AppState = { foo: number }
 
