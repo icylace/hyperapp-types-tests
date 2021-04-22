@@ -23,7 +23,7 @@ type Indexable = string | unknown[] | Record<string, any>
 // objects by disallowing numerical indexing.
 type IndexableByKey = Record<number, never>
 
-// `h()` can't handle the abscence of a tag name.
+// Empty strings can cause issues in certain places.
 type NonEmptyString<T> = T extends "" ? never : T
 
 // -----------------------------------------------------------------------------
@@ -54,9 +54,10 @@ declare module "hyperapp" {
 
   // ---------------------------------------------------------------------------
 
-  // This lets you use a version of `h` which assumes your particular app state.
-  // The `_ extends never` ensures that any such state-aware `h` doesn't have
-  // an explicitly set state type that contradicts the type it actually uses.
+  // This lets you make a variant of `h()` which is aware of your Hyperapp
+  // instance's state. The `_ extends never` ensures that any state-aware
+  // `h()` doesn't have an explicit state type that contradicts the
+  // state type it actually uses.
   interface TypedH<S> {
     <_ extends never, C = unknown, T extends string = string>(
       tag: NonEmptyString<T>,
@@ -70,24 +71,25 @@ declare module "hyperapp" {
   // An action transforms existing state and/or wraps another action.
   type Action<S, P = any> = (state: S, payload: P) => Dispatchable<S>
 
-  // A Hyperapp instance generally has an initial state and a base view and is
+  // A Hyperapp instance typically has an initial state and a top-level view
   // mounted over an available DOM element.
-  type App<S> = Readonly<AtLeastSomething<{
-    // State is established through either direct assignment or an action.
-    init: Dispatchable<S>
+  type App<S> =
+    Readonly<AtLeastSomething<{
+      // State is established through either direct assignment or an action.
+      init: Dispatchable<S>
 
-    // The subscriptions function manages a set of subscriptions.
-    subscriptions: (state: S) => (boolean | undefined | Subscription<S>)[]
+      // The subscriptions function manages a set of subscriptions.
+      subscriptions: (state: S) => (boolean | undefined | Subscription<S>)[]
 
-    // Dispatching can be augmented to do custom processing.
-    dispatch: (dispatch: Dispatch<S>) => Dispatch<S>
-  }, {
-    // A view builds a virtual DOM node depending on the application state.
-    view: (state: S) => VNode<S>
+      // Dispatching can be augmented to do custom processing.
+      dispatch: (dispatch: Dispatch<S>) => Dispatch<S>
+    }, {
+      // The top-level view can build a virtual DOM node depending on the state.
+      view: (state: S) => VNode<S>
 
-    // The mount node is where a Hyperapp instance will get created.
-    node: Node
-  }>>
+      // The mount node is where a Hyperapp instance will get placed.
+      node: Node
+    }>>
 
   // The `class` property represents an HTML class attribute string.
   type ClassProp =
@@ -97,7 +99,7 @@ declare module "hyperapp" {
     | Record<string, boolean | undefined>
     | ClassProp[]
 
-  // This lets event handling actions properly accept custom payloads.
+  // This lets event-handling actions properly accept custom payloads.
   type CustomPayloads<S, T> = {
     [K in keyof T]?:
       K extends "style"
@@ -107,10 +109,10 @@ declare module "hyperapp" {
       : T[K]
   }
 
-  // Dispatching signals state transitions to your Hyperapp instance.
+  // Dispatching will cause state transitions.
   type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: unknown) => void
 
-  // A dispatchable entity, when processed, causes a state transition.
+  // A dispatchable entity is used to cause a state transition.
   type Dispatchable<S, P = any> =
     | S
     | [state: S, ...effects: Effect<S, P>[]]
@@ -151,21 +153,18 @@ declare module "hyperapp" {
         key?: VNode<S>["key"]
         style?: StyleProp
 
-        // By disallowing `_VDOM` we ensure that values having the `VDOM` type
-        // are not mistaken for also having `PropList`.
-        _VDOM?: never
+        // By disallowing `_VNode` we ensure values having the `VNode` type are
+        // not mistaken for also having the `Props` type.
+        _VNode?: never
       }
     >
 
-  // The `style` property represents inline CSS.
-  //
-  // NOTE: This relies on what TypeScript itself recognizes as valid CSS
-  // properties. Custom properties are not covered as well as any newer
-  // properties that are not yet recognized by TypeScript. Apparently,
-  // the only way to accommodate them is to relax the adherence to
-  // TypeScript's CSS property definitions. The trade-off doesn't
-  // seem worth it given the chances of using such properties.
-  // However, you can use type casting if you want to them.
+  // The `style` property represents inline CSS. This relies on TypeScript's CSS
+  // property definitions. Custom properties aren't covered as well as any newer
+  // properties yet to be recognized by TypeScript. The only way to accommodate
+  // them is to relax the adherence to TypeScript's CSS property definitions.
+  // It's a poor trade-off given the likelihood of using such properties.
+  // However, you can use type casting if you want to use them.
   type StyleProp = IndexableByKey & {
     [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
   }
@@ -185,27 +184,26 @@ declare module "hyperapp" {
     readonly children: MaybeVNode<S>[]
     node: null | undefined | Node
 
-    // Hyperapp takes care of using native event handlers for us.
+    // Hyperapp takes care of using native Web platform event handlers for us.
     events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
 
     // A key can uniquely associate a VNode with a certain DOM element.
     readonly key: string | null | undefined
 
     // A VNode's tag is either an element name or a memoized view function.
-    readonly tag: string | ((state: S) => VNode<S>)
+    readonly tag: string | ((data: Indexable) => VNode<S>)
 
     // If the VNode's tag is a function then this data will get passed to it.
     memo?: Indexable
 
-    // These values are based on actual DOM node types:
+    // VNode types are based on actual DOM node types:
     // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
     readonly type: 1 | 3
 
-    // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
-    // apart from `PropList` objects. Since we don't expect users to manually
-    // create their own VNodes, we can take advantage of this trick that's
-    // specific to TypeScript without forcing the user to do
-    // anything different.
-    _VDOM: true
+    // `_VNode` is a phantom guard property which gives us a way to tell `VNode`
+    // objects apart from `Props` objects. Since we don't expect users to make
+    // their own VNodes manually, we can take advantage of this trick which
+    // is unique to TypeScript type definitions for JavaScript code.
+    _VNode: true
   }
 }
