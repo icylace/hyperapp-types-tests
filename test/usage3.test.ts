@@ -4,10 +4,10 @@
 //   AllOrNothing,
 //   AtLeastOne,
 //   AtLeastSomething,
+//   EventsMap,
 //   Indexable,
 //   IndexableByKey,
 //   NonEmptyString,
-//   EventsMap,
 // } from "hyperapp"
 
 // Public types.
@@ -15,17 +15,17 @@ import type {
   Action,
   App,
   ClassProp,
+  CustomPayloads,
   Dispatch,
   Dispatchable,
   Effect,
   EventActions,
   MaybeVDOM,
-  PropList,
+  Props,
   StyleProp,
   Subscription,
   TypedH,
   Unsubscribe,
-  ValidateCustomPayloads,
   VDOM,
 } from "hyperapp"
 

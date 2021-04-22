@@ -1,30 +1,30 @@
 // Minimum TypeScript Version: 4.2
 
-// This utility type requires every property of an object or none at all.
+// This requires every property of an object or none at all.
 type AllOrNothing<T> = T | { [K in keyof T]?: never }
 
-// This utility type ensures at least one property in an object is present.
+// This ensures at least one property in an object is present.
 type AtLeastOne<T> = { [K in keyof T]: Pick<T, K> }[keyof T]
 // Credit: https://stackoverflow.com/a/59987826/1935675
 
-// This utility type ensures at least one object property group is present.
+// This ensures at least one object property group is present.
 type AtLeastSomething<T, U> = U | AtLeastOne<T> & AllOrNothing<U>
-
-// Indexable values are able to use subscripting.
-type Indexable = string | unknown[] | Record<string, any>
-
-// This utility type validates plain objects while invalidating array objects
-// and string objects by disallowing numerical indexing.
-type IndexableByKey = Record<number, never>
-
-// `h()` can't handle the abscence of a tag name.
-type NonEmptyString<T> = T extends "" ? never : T
 
 // Most event typings are provided by TypeScript itself.
 type EventsMap =
   & { [K in keyof HTMLElementEventMap as `on${K}`]: HTMLElementEventMap[K] }
   & { [K in keyof WindowEventMap as `on${K}`]: WindowEventMap[K] }
   & { onsearch: Event }
+
+// Indexable values are able to use subscripting.
+type Indexable = string | unknown[] | Record<string, any>
+
+// This validates plain objects while invalidating array objects and string
+// objects by disallowing numerical indexing.
+type IndexableByKey = Record<number, never>
+
+// `h()` can't handle the abscence of a tag name.
+type NonEmptyString<T> = T extends "" ? never : T
 
 // -----------------------------------------------------------------------------
 
@@ -36,13 +36,13 @@ declare module "hyperapp" {
   // `h()` builds a virtual DOM node.
   function h<S, C = unknown, T extends string = string>(
     tag: NonEmptyString<T>,
-    props: ValidateCustomPayloads<S, C> & PropList<S>,
+    props: CustomPayloads<S, C> & Props<S>,
     children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
   ): VDOM<S>
 
   // `memo()` stores a view along with any given data for it.
   function memo<S, D extends Indexable = Indexable>(
-    view: (state: D) => VDOM<D>,
+    view: (state: D) => VDOM<S>,
     data: D
   ): VDOM<S>
 
@@ -60,14 +60,20 @@ declare module "hyperapp" {
   interface TypedH<S> {
     <_ extends never, C = unknown, T extends string = string>(
       tag: NonEmptyString<T>,
-      props: ValidateCustomPayloads<S, C> & PropList<S>,
+      props: CustomPayloads<S, C> & Props<S>,
       children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
     ): VDOM<S>
   }
 
+  // ---------------------------------------------------------------------------
+
+  // An action transforms existing state and/or wraps another action.
+  type Action<S, P = any> = (state: S, payload: P) => Dispatchable<S>
+
   // A Hyperapp instance generally has an initial state and a base view and is
   // mounted over an available DOM element.
   type App<S> = Readonly<AtLeastSomething<{
+    // State is established through either direct assignment or an action.
     init: Dispatchable<S>
 
     // The subscriptions function manages a set of subscriptions.
@@ -81,29 +87,28 @@ declare module "hyperapp" {
     // Dispatching can be augmented to do custom processing.
     dispatch: (dispatch: Dispatch<S>) => Dispatch<S>
   }, {
-    // A view builds a virtual DOM node representation of the application state.
+    // A view builds a virtual DOM node depending on the application state.
     view: (state: S) => VDOM<S>
 
     // The mount node is where a Hyperapp instance will get created.
     node: Node
   }>>
 
-  // This helper for `h` lets event handling actions accept custom payloads.
-  type ValidateCustomPayloads<S, T> = {
+  // The `class` property represents an HTML class attribute string.
+  type ClassProp =
+    | boolean
+    | string
+    | undefined
+    | Record<string, boolean | undefined>
+    | ClassProp[]
+
+  // This lets event handling actions accept custom payloads.
+  type CustomPayloads<S, T> = {
     [K in keyof T]?:
       K extends "style" ? StyleProp
       : T[K] extends [Action<S, infer P>, unknown] ? [Action<S, P>, P]
       : T[K]
   }
-
-  // A subscription reacts to external activity.
-  type Subscription<S, P = unknown> = [
-    subscriber: (dispatch: Dispatch<S>, payload: P) => void | Unsubscribe,
-    payload: P
-  ]
-
-  // An unsubscribe function cleans up a canceled subscription.
-  type Unsubscribe = () => void
 
   // A dispatched action handles an event in the context of the current state.
   type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: unknown) => void
@@ -115,47 +120,24 @@ declare module "hyperapp" {
     | Action<S, P>
     | [action: Action<S, P>, payload: P]
 
-  // An action transforms existing state and/or wraps another action.
-  type Action<S, P = any> = (state: S, payload: P) => Dispatchable<S>
-
   // An effect is where side effects and any additional dispatching may occur.
   type Effect<S, P = unknown> = [
     effecter: (dispatch: Dispatch<S>, payload: P) => void | Promise<void>,
     payload: P
   ]
 
-  // A virtual DOM node represents an actual DOM element.
-  type VDOM<S> = {
-    readonly props: PropList<S>
-    readonly children: MaybeVDOM<S>[]
-    node: null | undefined | Node
-    memo?: PropList<S>
-    events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
-
-    // A key can uniquely associate a virtual DOM node with a certain DOM element.
-    readonly key: string | null | undefined
-
-    // A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes
-    // are tagged by their type to assist rendering.
-    readonly tag: string | ((state: S) => VDOM<S>)
-
-    // These values are based on actual DOM node types:
-    // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
-    readonly type: 1 | 3
-
-    // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
-    // apart from `PropList` objects. Since we don't expect users to manually
-    // create their own VNodes, we can take advantage of this trick that's
-    // specific to TypeScript without forcing the user to do
-    // anything different.
-    _VDOM: true
+  // Event handlers are implemented using actions.
+  type EventActions<S> = {
+    [K in keyof EventsMap]:
+      | Action<S, EventsMap[K]>
+      | [action: Action<S>, payload: unknown]
   }
 
   // In certain places a virtual DOM node can be made optional.
   type MaybeVDOM<S> = boolean | null | undefined | VDOM<S>
 
   // Virtual DOM properties will often correspond to HTML attributes.
-  type PropList<S> =
+  type Props<S> =
     Readonly<
       Partial<
         Omit<HTMLElement, keyof (
@@ -178,14 +160,6 @@ declare module "hyperapp" {
       }
     >
 
-  // The `class` property represents an HTML class attribute string.
-  type ClassProp =
-    | boolean
-    | string
-    | undefined
-    | Record<string, boolean | undefined>
-    | ClassProp[]
-
   // The `style` property represents inline CSS.
   //
   // NOTE: This relies on what TypeScript itself recognizes as valid CSS
@@ -199,10 +173,39 @@ declare module "hyperapp" {
     [K in keyof CSSStyleDeclaration]?: CSSStyleDeclaration[K] | null
   }
 
-  // Event handlers are implemented using actions.
-  type EventActions<S> = {
-    [K in keyof EventsMap]:
-      | Action<S, EventsMap[K]>
-      | [action: Action<S>, payload: unknown]
+  // A subscription reacts to external activity.
+  type Subscription<S, P = unknown> = [
+    subscriber: (dispatch: Dispatch<S>, payload: P) => void | Unsubscribe,
+    payload: P
+  ]
+
+  // An unsubscribe function cleans up a canceled subscription.
+  type Unsubscribe = () => void
+
+  // A virtual DOM node represents an actual DOM element.
+  type VDOM<S> = {
+    readonly props: Props<S>
+    readonly children: MaybeVDOM<S>[]
+    node: null | undefined | Node
+    memo?: Props<S>
+    events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
+
+    // A key can uniquely associate a virtual DOM node with a certain DOM element.
+    readonly key: string | null | undefined
+
+    // A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes
+    // are tagged by their type to assist rendering.
+    readonly tag: string | ((state: S) => VDOM<S>)
+
+    // These values are based on actual DOM node types:
+    // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+    readonly type: 1 | 3
+
+    // `_VDOM` is a guard property which gives us a way to tell `VDOM` objects
+    // apart from `PropList` objects. Since we don't expect users to manually
+    // create their own VNodes, we can take advantage of this trick that's
+    // specific to TypeScript without forcing the user to do
+    // anything different.
+    _VDOM: true
   }
 }
