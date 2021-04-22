@@ -96,28 +96,28 @@ memo<number>(text("hi"), undefined)    // $ExpectError
 memo<number>(text("hi"), null)         // $ExpectError
 memo<number>(text("hi"), {})           // $ExpectError
 
-memo(text, "hi")                  // $ExpectType VDOM<unknown>
-memo(text, ["hi"])                // $ExpectType VDOM<unknown>
-memo(text, new String("hi"))      // $ExpectType VDOM<unknown>
-memo(text, new String(["hi"]))    // $ExpectType VDOM<unknown>
+memo(text, "hi")                  // $ExpectType VNode<unknown>
+memo(text, ["hi"])                // $ExpectType VNode<unknown>
+memo(text, new String("hi"))      // $ExpectType VNode<unknown>
+memo(text, new String(["hi"]))    // $ExpectType VNode<unknown>
 
-memo<number>(text, "hi")                  // $ExpectType VDOM<number>
-memo<number>(text, ["hi"])                // $ExpectType VDOM<number>
-memo<number>(text, new String("hi"))      // $ExpectType VDOM<number>
-memo<number>(text, new String(["hi"]))    // $ExpectType VDOM<number>
+memo<number>(text, "hi")                  // $ExpectType VNode<number>
+memo<number>(text, ["hi"])                // $ExpectType VNode<number>
+memo<number>(text, new String("hi"))      // $ExpectType VNode<number>
+memo<number>(text, new String(["hi"]))    // $ExpectType VNode<number>
 
-memo<string>(text, "hi")                  // $ExpectType VDOM<string>
-memo<string>(text, ["hi"])                // $ExpectType VDOM<string>
-memo<string>(text, new String("hi"))      // $ExpectType VDOM<string>
-memo<string>(text, new String(["hi"]))    // $ExpectType VDOM<string>
+memo<string>(text, "hi")                  // $ExpectType VNode<string>
+memo<string>(text, ["hi"])                // $ExpectType VNode<string>
+memo<string>(text, new String("hi"))      // $ExpectType VNode<string>
+memo<string>(text, new String(["hi"]))    // $ExpectType VNode<string>
 
-// $ExpectType VDOM<unknown>
+// $ExpectType VNode<unknown>
 memo((data) => h("div", {}, text(data)), "hi")
 
-// $ExpectType VDOM<number>
+// $ExpectType VNode<number>
 memo<number>((data) => h("div", {}, text(data)), "hi")
 
-// $ExpectType VDOM<string>
+// $ExpectType VNode<string>
 memo<string>((data) => h("div", {}, text(data)), "hi")
 
-h("div", {}, memo(text, ["hi"]))    // $ExpectType VDOM<unknown>
+h("div", {}, memo(text, ["hi"]))    // $ExpectType VNode<unknown>

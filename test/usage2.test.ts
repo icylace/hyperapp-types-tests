@@ -1,7 +1,7 @@
 // Credit:
 // https://github.com/jorgebucaran/hyperapp/discussions/1052#discussioncomment-632424
 
-import { h, text, Action, VDOM } from "hyperapp"
+import { h, text, Action, VNode } from "hyperapp"
 
 type MyComponentProps<S> = {
   foo: Action<S>
@@ -25,8 +25,8 @@ const myComponent = <S>(props: MyComponentProps<S>) =>
 // The easiest way to solve this is to explicitly
 // declare the return type:
 
-// $ExpectType <S>(props: MyComponentProps<S>) => VDOM<S>
-const myComponent2 = <S>(props: MyComponentProps<S>): VDOM<S> =>
+// $ExpectType <S>(props: MyComponentProps<S>) => VNode<S>
+const myComponent2 = <S>(props: MyComponentProps<S>): VNode<S> =>
   h("div", {}, [
     h("button", { onclick: props.foo }, text("click")),
     h("p", {}, text(props.bar)),

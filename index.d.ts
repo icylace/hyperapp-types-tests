@@ -37,20 +37,20 @@ declare module "hyperapp" {
   function h<S, C = unknown, T extends string = string>(
     tag: NonEmptyString<T>,
     props: CustomPayloads<S, C> & Props<S>,
-    children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
-  ): VDOM<S>
+    children?: MaybeVNode<S> | readonly MaybeVNode<S>[]
+  ): VNode<S>
 
   // `memo()` stores a view along with any given data for it.
   function memo<S, D extends Indexable = Indexable>(
-    view: (state: D) => VDOM<S>,
+    view: (state: D) => VNode<S>,
     data: D
-  ): VDOM<S>
+  ): VNode<S>
 
   // `text()` creates a virtual DOM node representing plain text.
   function text<S, T = unknown>(
     // Values, aside from symbols and functions, can be handled.
     value: T extends symbol | ((..._: unknown[]) => unknown) ? never : T
-  ): VDOM<S>
+  ): VNode<S>
 
   // ---------------------------------------------------------------------------
 
@@ -61,8 +61,8 @@ declare module "hyperapp" {
     <_ extends never, C = unknown, T extends string = string>(
       tag: NonEmptyString<T>,
       props: CustomPayloads<S, C> & Props<S>,
-      children?: MaybeVDOM<S> | readonly MaybeVDOM<S>[]
-    ): VDOM<S>
+      children?: MaybeVNode<S> | readonly MaybeVNode<S>[]
+    ): VNode<S>
   }
 
   // ---------------------------------------------------------------------------
@@ -83,7 +83,7 @@ declare module "hyperapp" {
     dispatch: (dispatch: Dispatch<S>) => Dispatch<S>
   }, {
     // A view builds a virtual DOM node depending on the application state.
-    view: (state: S) => VDOM<S>
+    view: (state: S) => VNode<S>
 
     // The mount node is where a Hyperapp instance will get created.
     node: Node
@@ -131,7 +131,7 @@ declare module "hyperapp" {
   }
 
   // In certain places a virtual DOM node can be made optional.
-  type MaybeVDOM<S> = boolean | null | undefined | VDOM<S>
+  type MaybeVNode<S> = boolean | null | undefined | VNode<S>
 
   // Virtual DOM properties will often correspond to HTML attributes.
   type Props<S> =
@@ -148,7 +148,7 @@ declare module "hyperapp" {
       {
         [_: string]: unknown
         class?: ClassProp
-        key?: VDOM<S>["key"]
+        key?: VNode<S>["key"]
         style?: StyleProp
 
         // By disallowing `_VDOM` we ensure that values having the `VDOM` type
@@ -180,9 +180,9 @@ declare module "hyperapp" {
   type Unsubscribe = () => void
 
   // A virtual DOM node represents an actual DOM element.
-  type VDOM<S> = {
+  type VNode<S> = {
     readonly props: Props<S>
-    readonly children: MaybeVDOM<S>[]
+    readonly children: MaybeVNode<S>[]
     node: null | undefined | Node
     memo?: Props<S>
     events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
@@ -192,7 +192,7 @@ declare module "hyperapp" {
 
     // A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes
     // are tagged by their type to assist rendering.
-    readonly tag: string | ((state: S) => VDOM<S>)
+    readonly tag: string | ((state: S) => VNode<S>)
 
     // These values are based on actual DOM node types:
     // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType

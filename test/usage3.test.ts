@@ -20,13 +20,13 @@ import type {
   Dispatchable,
   Effect,
   EventActions,
-  MaybeVDOM,
+  MaybeVNode,
   Props,
   StyleProp,
   Subscription,
   TypedH,
   Unsubscribe,
-  VDOM,
+  VNode,
 } from "hyperapp"
 
 // Public functions.
