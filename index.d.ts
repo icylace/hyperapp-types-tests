@@ -30,7 +30,7 @@ type NonEmptyString<T> = T extends "" ? never : T
 
 declare module "hyperapp" {
   // `app()` initiates a Hyperapp instance. Only `app()`'s `node:` property and
-  // effecters and subscribers are where side effects are allowed.
+  // effecters and subscribers are allowed to have side effects.
   function app<S>(props: App<S>): Dispatch<S>
 
   // `h()` builds a virtual DOM node.
