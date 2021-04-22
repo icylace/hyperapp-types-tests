@@ -194,8 +194,8 @@ declare module "hyperapp" {
     // A VNode's tag is either an element name or a memoized view function.
     readonly tag: string | ((state: S) => VNode<S>)
 
-    // This is data to pass along to the tag if it's a view function.
-    memo?: Props<S>
+    // If the VNode's tag is a function then this data will get passed to it.
+    memo?: Indexable
 
     // These values are based on actual DOM node types:
     // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
