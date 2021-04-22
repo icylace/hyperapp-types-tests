@@ -27,7 +27,6 @@ const questionBlock = (opened: boolean): VNode<State> =>
         text("?")
       )
 
-
 const maybeBlock = (opened: boolean): MaybeVNode<State> =>
   opened
     ? null
