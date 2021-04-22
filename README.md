@@ -19,7 +19,7 @@ Some test cases are currently unsolved and will be shown when you run `npm test`
 
 ## Why is [dtslint](https://github.com/microsoft/dtslint) used intead of [tsd](https://github.com/SamVerschueren/tsd)?
 
-[dtslint](https://github.com/microsoft/dtslint) makes it convenient to have a local copy of the type definitions for testing which is useful for testing out experimental changes.
+[dtslint](https://github.com/microsoft/dtslint) makes it convenient to have a local copy of the type definitions for testing which is useful for testing out experimental changes. I don't know how to do that in [tsd](https://github.com/SamVerschueren/tsd) if it's even possible at all.
 
 ## Contributing
 
