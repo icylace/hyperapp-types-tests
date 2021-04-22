@@ -77,12 +77,7 @@ declare module "hyperapp" {
     init: Dispatchable<S>
 
     // The subscriptions function manages a set of subscriptions.
-    subscriptions: (state: S) => (
-      | boolean
-      | undefined
-      | Subscription<S>
-      | Unsubscribe
-    )[]
+    subscriptions: (state: S) => (boolean | undefined | Subscription<S>)[]
 
     // Dispatching can be augmented to do custom processing.
     dispatch: (dispatch: Dispatch<S>) => Dispatch<S>
@@ -105,8 +100,10 @@ declare module "hyperapp" {
   // This lets event handling actions accept custom payloads.
   type CustomPayloads<S, T> = {
     [K in keyof T]?:
-      K extends "style" ? StyleProp
-      : T[K] extends [Action<S, infer P>, unknown] ? [Action<S, P>, P]
+      K extends "style"
+      ? StyleProp
+      : T[K] extends [action: Action<S, infer P>, payload: unknown]
+      ? [action: Action<S, P>, payload: P]
       : T[K]
   }
 
