@@ -29,8 +29,8 @@ type NonEmptyString<T> = T extends "" ? never : T
 // -----------------------------------------------------------------------------
 
 declare module "hyperapp" {
-  // `app()` initiates a Hyperapp instance. `app()` along with runners and
-  // subscribers are the only places where side effects are allowed.
+  // `app()` initiates a Hyperapp instance. Only `app()`'s `node:` property and
+  // effecters and subscribers are where side effects are allowed.
   function app<S>(props: App<S>): Dispatch<S>
 
   // `h()` builds a virtual DOM node.
@@ -97,7 +97,7 @@ declare module "hyperapp" {
     | Record<string, boolean | undefined>
     | ClassProp[]
 
-  // This lets event handling actions accept custom payloads.
+  // This lets event handling actions properly accept custom payloads.
   type CustomPayloads<S, T> = {
     [K in keyof T]?:
       K extends "style"
@@ -107,7 +107,7 @@ declare module "hyperapp" {
       : T[K]
   }
 
-  // A dispatched action handles an event in the context of the current state.
+  // Dispatching signals state transitions to your Hyperapp instance.
   type Dispatch<S> = (dispatchable: Dispatchable<S>, payload?: unknown) => void
 
   // A dispatchable entity, when processed, causes a state transition.
@@ -179,14 +179,16 @@ declare module "hyperapp" {
   // An unsubscribe function cleans up a canceled subscription.
   type Unsubscribe = () => void
 
-  // A virtual DOM node represents an actual DOM element.
+  // A virtual DOM node (a.k.a. VNode) represents an actual DOM element.
   type VNode<S> = {
     readonly props: Props<S>
     readonly children: MaybeVNode<S>[]
     node: null | undefined | Node
+
+    // Hyperapp takes care of using native event handlers for us.
     events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
 
-    // A key can uniquely associate a virtual DOM node with a certain DOM element.
+    // A key can uniquely associate a VNode with a certain DOM element.
     readonly key: string | null | undefined
 
     // A VNode's tag is either an element name or a memoized view function.

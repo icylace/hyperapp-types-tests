@@ -452,6 +452,9 @@ h<number>("p", { style: [undefined] })           // $ExpectError
 h("p", { customThingy: "blahbiddyblah"}, text("hi"))
 
 // $ExpectType VNode<unknown>
+h("p", { something: 6543 }, text("hi"))
+
+// $ExpectType VNode<unknown>
 h("p", { "data-thingy": "blahbiddyblah"}, text("hi"))
 
 // $ExpectType VNode<unknown>
