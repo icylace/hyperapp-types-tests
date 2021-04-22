@@ -184,15 +184,16 @@ declare module "hyperapp" {
     readonly props: Props<S>
     readonly children: MaybeVNode<S>[]
     node: null | undefined | Node
-    memo?: Props<S>
     events?: Record<string, Action<S> | [action: Action<S>, payload: unknown]>
 
     // A key can uniquely associate a virtual DOM node with a certain DOM element.
     readonly key: string | null | undefined
 
-    // A virtual DOM node's tag has metadata relevant to it. Virtual DOM nodes
-    // are tagged by their type to assist rendering.
+    // A VNode's tag is either an element name or a memoized view function.
     readonly tag: string | ((state: S) => VNode<S>)
+
+    // This is data to pass along to the tag if it's a view function.
+    memo?: Props<S>
 
     // These values are based on actual DOM node types:
     // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
