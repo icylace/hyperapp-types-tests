@@ -42,7 +42,7 @@ declare module "hyperapp" {
 
   // `memo()` stores a view along with any given data for it.
   function memo<S, D extends Indexable = Indexable>(
-    view: (state: D) => VNode<S>,
+    view: (data: D) => VNode<S>,
     data: D
   ): VNode<S>
 
