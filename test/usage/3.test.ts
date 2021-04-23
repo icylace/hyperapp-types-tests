@@ -23,5 +23,5 @@ app({
   init: "boop",
   subscriptions: (_state) => [
     subscribe(GotSubData)
-  ]
+  ],
 })
