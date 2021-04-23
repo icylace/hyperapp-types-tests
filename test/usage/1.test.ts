@@ -1,4 +1,5 @@
-// Credit: https://github.com/jorgebucaran/hyperapp/issues/1048
+// Credit:
+// https://github.com/jorgebucaran/hyperapp/issues/1048
 
 import type { TypedH, VNode } from "hyperapp"
 

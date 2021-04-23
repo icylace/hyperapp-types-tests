@@ -1,16 +1,17 @@
 // Private types. Attempting to import them should cause errors.
-//
-// import type {
-//   AllOrNothing,
-//   AtLeastOne,
-//   AtLeastSomething,
-//   EventsMap,
-//   Indexable,
-//   IndexableByKey,
-//   NonEmptyString,
-// } from "hyperapp"
+/* *
+import type {
+  AllOrNothing,
+  AtLeastOne,
+  AtLeastSomething,
+  EventsMap,
+  Indexable,
+  IndexableByKey,
+  NonEmptyString,
+} from "hyperapp"
+/* */
 
-// Public types.
+// Public types. Attempting to import them should be fine.
 import type {
   Action,
   App,
@@ -29,5 +30,5 @@ import type {
   VNode,
 } from "hyperapp"
 
-// Public functions.
+// Public functions. Attempting to import them should be fine.
 import { h, text, app, memo } from "hyperapp"
