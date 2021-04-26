@@ -2,9 +2,9 @@ import type { TypedH } from "hyperapp"
 
 import { h as ha } from "hyperapp"
 
-type S0 = boolean
+type S0 = false
 type S1 = true
-type S2 = false
+type S2 = boolean
 type S3 = 0
 type S4 = 2424
 type S5 = -123
@@ -54,9 +54,9 @@ const h22: TypedH<S22> = ha
 const h23: TypedH<S23> = ha    // $ExpectError
 const h24: TypedH<S24> = ha
 
-h0("br", {})     // $ExpectType VNode<boolean>
+h0("br", {})     // $ExpectType VNode<false>
 h1("br", {})     // $ExpectType VNode<true>
-h2("br", {})     // $ExpectType VNode<false>
+h2("br", {})     // $ExpectType VNode<boolean>
 h3("br", {})     // $ExpectType VNode<0>
 h4("br", {})     // $ExpectType VNode<2424>
 h5("br", {})     // $ExpectType VNode<-123>
