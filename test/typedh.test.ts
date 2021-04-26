@@ -25,6 +25,8 @@ type S19 = symbol
 type S20 = () => {}
 type S21 = null
 type S22 = undefined
+type S23 = unknown
+type S24 = any
 
 const h0: TypedH<S0> = ha
 const h1: TypedH<S1> = ha
@@ -49,6 +51,8 @@ const h19: TypedH<S19> = ha
 const h20: TypedH<S20> = ha
 const h21: TypedH<S21> = ha
 const h22: TypedH<S22> = ha
+const h23: TypedH<S23> = ha    // $ExpectError
+const h24: TypedH<S24> = ha
 
 h0("br", {})     // $ExpectType VNode<boolean>
 h1("br", {})     // $ExpectType VNode<true>
@@ -73,3 +77,5 @@ h19("br", {})    // $ExpectType VNode<symbol>
 h20("br", {})    // $ExpectType VNode<S20>
 h21("br", {})    // $ExpectType VNode<null>
 h22("br", {})    // $ExpectType VNode<undefined>
+h23("br", {})    // $ExpectType VNode<unknown>
+h24("br", {})    // $ExpectType VNode<any>

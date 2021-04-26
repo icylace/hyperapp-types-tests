@@ -471,6 +471,8 @@ h<symbol>("br", {})                                // $ExpectType VNode<symbol>
 h<() => {}>("br", {})                              // $ExpectType VNode<() => {}>
 h<null>("br", {})                                  // $ExpectType VNode<null>
 h<undefined>("br", {})                             // $ExpectType VNode<undefined>
+h<unknown>("br", {})                               // $ExpectType VNode<unknown>
+h<any>("br", {})                                   // $ExpectType VNode<any>
 
 // -----------------------------------------------------------------------------
 
