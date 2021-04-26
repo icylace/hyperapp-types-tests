@@ -15,13 +15,15 @@ type S9 = string
 type S10 = {}
 type S11 = { [_: string]: any }
 type S12 = { [_: string]: any, foo: number }
-type S13 = { foo: number }
-type S14 = Set<any>
-type S15 = []
-type S16 = symbol
-type S17 = () => {}
-type S18 = null
-type S19 = undefined
+type S13 = { [_: string]: any, foo?: number }
+type S14 = { foo: number }
+type S15 = { foo?: number }
+type S16 = Set<any>
+type S17 = []
+type S18 = symbol
+type S19 = () => {}
+type S20 = null
+type S21 = undefined
 
 const h0: TypedH<S0> = ha
 const h1: TypedH<S1> = ha
@@ -43,6 +45,8 @@ const h16: TypedH<S16> = ha
 const h17: TypedH<S17> = ha
 const h18: TypedH<S18> = ha
 const h19: TypedH<S19> = ha
+const h20: TypedH<S20> = ha
+const h21: TypedH<S21> = ha
 
 h0("br", {})     // $ExpectType VNode<boolean>
 h1("br", {})     // $ExpectType VNode<true>
@@ -59,8 +63,10 @@ h11("br", {})    // $ExpectType VNode<S11>
 h12("br", {})    // $ExpectType VNode<S12>
 h13("br", {})    // $ExpectType VNode<S13>
 h14("br", {})    // $ExpectType VNode<S14>
-h15("br", {})    // $ExpectType VNode<[]>
-h16("br", {})    // $ExpectType VNode<symbol>
-h17("br", {})    // $ExpectType VNode<S17>
-h18("br", {})    // $ExpectType VNode<null>
-h19("br", {})    // $ExpectType VNode<undefined>
+h15("br", {})    // $ExpectType VNode<S15>
+h16("br", {})    // $ExpectType VNode<S16>
+h17("br", {})    // $ExpectType VNode<[]>
+h18("br", {})    // $ExpectType VNode<symbol>
+h19("br", {})    // $ExpectType VNode<S19>
+h20("br", {})    // $ExpectType VNode<null>
+h21("br", {})    // $ExpectType VNode<undefined>
