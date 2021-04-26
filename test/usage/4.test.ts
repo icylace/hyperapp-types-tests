@@ -12,7 +12,7 @@ const _subscriber = <S>(
   return () => {}
 }
 
-const subscribe = <S>(foo: Action<S, string>): Subscription<S> =>
+const subscribe = <S>(foo: Action<S, string>): Subscription<S, unknown> =>
   [_subscriber, { foo }]
 
 // ----
