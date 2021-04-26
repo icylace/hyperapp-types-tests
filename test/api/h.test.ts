@@ -448,6 +448,32 @@ h<number>("p", { style: [undefined] })           // $ExpectError
 
 // -----------------------------------------------------------------------------
 
+h<boolean>("br", {})                               // $ExpectType VNode<boolean>
+h<true>("br", {})                                  // $ExpectType VNode<true>
+h<false>("br", {})                                 // $ExpectType VNode<false>
+h<0>("br", {})                                     // $ExpectType VNode<0>
+h<2424>("br", {})                                  // $ExpectType VNode<2424>
+h<-123>("br", {})                                  // $ExpectType VNode<-123>
+h<number>("br", {})                                // $ExpectType VNode<number>
+h<"">("br", {})                                    // $ExpectType VNode<"">
+h<"hi">("br", {})                                  // $ExpectType VNode<"hi">
+h<string>("br", {})                                // $ExpectType VNode<string>
+h<{}>("br", {})                                    // $ExpectType VNode<{}>
+h<{ [_: string]: any }>("br", {})                  // $ExpectType VNode<{ [_: string]: any; }>
+h<{ [_: string]: any, foo: number }>("br", {})     // $ExpectType VNode<{ [_: string]: any; foo: number; }>
+h<{ [_: string]: any, foo?: number }>("br", {})    // $ExpectType VNode<{ [_: string]: any; foo?: number | undefined; }>
+h<{ foo: number }>("br", {})                       // $ExpectType VNode<{ foo: number; }>
+h<{ foo?: number }>("br", {})                      // $ExpectType VNode<{ foo?: number | undefined; }>
+h<Set<any>>("br", {})                              // $ExpectType VNode<Set<any>>
+h<Set<number>>("br", {})                           // $ExpectType VNode<Set<number>>
+h<[]>("br", {})                                    // $ExpectType VNode<[]>
+h<symbol>("br", {})                                // $ExpectType VNode<symbol>
+h<() => {}>("br", {})                              // $ExpectType VNode<() => {}>
+h<null>("br", {})                                  // $ExpectType VNode<null>
+h<undefined>("br", {})                             // $ExpectType VNode<undefined>
+
+// -----------------------------------------------------------------------------
+
 // $ExpectType VNode<unknown>
 h("p", { customThingy: "blahbiddyblah"}, text("hi"))
 
