@@ -120,7 +120,7 @@ app<Foo>({ init: [AddSome, 42] })
 // $ExpectError
 h("button", { onclick: AddSome }, text("add event?!"))
 
-// $ExpectType VNode<Foo>
+// $ExpectType ElementVNode<Foo>
 h("button", { onclick: [AddSome, 32] }, text("add 32"))
 
 // $ExpectError
@@ -139,7 +139,7 @@ const AddSomeMore: Action<AppState, number> =
 // $ExpectError
 h("button", { onclick: AddSomeMore }, text("add event?!"))
 
-// $ExpectType VNode<AppState>
+// $ExpectType ElementVNode<AppState>
 h("button", { onclick: [AddSomeMore, 32] }, text("add 32"))
 
 // $ExpectError
@@ -180,7 +180,7 @@ type State = {
 const AddFoo: Action<State, number> = (state, amount) => ({...state, foo: state.foo + amount})
 const SetName: Action<State, string> = (state, name) => ({...state, name})
 
-// $ExpectType VNode<State>
+// $ExpectType ElementVNode<State>
 h("div", {
   onmousedown: [AddFoo, 32],
   onmouseup: [SetName, "unknown"],
@@ -200,7 +200,7 @@ h("div", {
   onmouseleave: [SetName, 32],
 })
 
-// $ExpectType VNode<State>
+// $ExpectType ElementVNode<State>
 h("div", { onmouseenter: (state: State, payload: MouseEvent) => state })
 
 // $ExpectError

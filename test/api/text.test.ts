@@ -1,48 +1,48 @@
 import { text } from "hyperapp"
 
 text()                    // $ExpectError
-text(true)                // $ExpectType VNode<unknown>
-text(false)               // $ExpectType VNode<unknown>
-text(0)                   // $ExpectType VNode<unknown>
-text(2424)                // $ExpectType VNode<unknown>
-text(-123)                // $ExpectType VNode<unknown>
-text(-Infinity)           // $ExpectType VNode<unknown>
-text(Infinity)            // $ExpectType VNode<unknown>
-text(NaN)                 // $ExpectType VNode<unknown>
-text("")                  // $ExpectType VNode<unknown>
-text("hi")                // $ExpectType VNode<unknown>
-text(new String(""))      // $ExpectType VNode<unknown>
-text(new String("hi"))    // $ExpectType VNode<unknown>
-text({})                  // $ExpectType VNode<unknown>
-text(new Set())           // $ExpectType VNode<unknown>
-text([])                  // $ExpectType VNode<unknown>
+text(true)                // $ExpectType TextVNode
+text(false)               // $ExpectType TextVNode
+text(0)                   // $ExpectType TextVNode
+text(2424)                // $ExpectType TextVNode
+text(-123)                // $ExpectType TextVNode
+text(-Infinity)           // $ExpectType TextVNode
+text(Infinity)            // $ExpectType TextVNode
+text(NaN)                 // $ExpectType TextVNode
+text("")                  // $ExpectType TextVNode
+text("hi")                // $ExpectType TextVNode
+text(new String(""))      // $ExpectType TextVNode
+text(new String("hi"))    // $ExpectType TextVNode
+text({})                  // $ExpectType TextVNode
+text(new Set())           // $ExpectType TextVNode
+text([])                  // $ExpectType TextVNode
 text(Symbol())            // $ExpectError
 text(() => { })           // $ExpectError
-text(null)                // $ExpectType VNode<unknown>
-text(undefined)           // $ExpectType VNode<unknown>
+text(null)                // $ExpectType TextVNode
+text(undefined)           // $ExpectType TextVNode
 
-text<number>()                    // $ExpectError
-text<number>(true)                // $ExpectType VNode<number>
-text<number>(false)               // $ExpectType VNode<number>
-text<number>(0)                   // $ExpectType VNode<number>
-text<number>(2424)                // $ExpectType VNode<number>
-text<number>(-123)                // $ExpectType VNode<number>
-text<number>(-Infinity)           // $ExpectType VNode<number>
-text<number>(Infinity)            // $ExpectType VNode<number>
-text<number>(NaN)                 // $ExpectType VNode<number>
-text<number>("")                  // $ExpectType VNode<number>
-text<number>("hi")                // $ExpectType VNode<number>
-text<number>(new String(""))      // $ExpectType VNode<number>
-text<number>(new String("hi"))    // $ExpectType VNode<number>
-text<number>({})                  // $ExpectType VNode<number>
-text<number>(new Set())           // $ExpectType VNode<number>
-text<number>([])                  // $ExpectType VNode<number>
+// text<number>()                    // $ExpectError
+// text<number>(true)                // $ExpectType TextVNode
+// text<number>(false)               // $ExpectType TextVNode
+// text<number>(0)                   // $ExpectType TextVNode
+// text<number>(2424)                // $ExpectType TextVNode
+// text<number>(-123)                // $ExpectType TextVNode
+// text<number>(-Infinity)           // $ExpectType TextVNode
+// text<number>(Infinity)            // $ExpectType TextVNode
+// text<number>(NaN)                 // $ExpectType TextVNode
+// text<number>("")                  // $ExpectType TextVNode
+// text<number>("hi")                // $ExpectType TextVNode
+// text<number>(new String(""))      // $ExpectType TextVNode
+// text<number>(new String("hi"))    // $ExpectType TextVNode
+// text<number>({})                  // $ExpectType TextVNode
+// text<number>(new Set())           // $ExpectType TextVNode
+// text<number>([])                  // $ExpectType TextVNode
 
-// TODO:
-text<number>(Symbol())            // $ExpectError
+// // TODO:
+// text<number>(Symbol())            // $ExpectError
 
-// TODO:
-text<number>(() => { })           // $ExpectError
+// // TODO:
+// text<number>(() => { })           // $ExpectError
 
-text<number>(null)                // $ExpectType VNode<number>
-text<number>(undefined)           // $ExpectType VNode<number>
+// text<number>(null)                // $ExpectType TextVNode
+// text<number>(undefined)           // $ExpectType TextVNode
