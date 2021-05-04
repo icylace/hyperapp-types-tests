@@ -120,4 +120,5 @@ memo<number>((data) => h("div", {}, text(data)), "hi")
 // $ExpectType VNode<string>
 memo<string>((data) => h("div", {}, text(data)), "hi")
 
-h("div", {}, memo(text, ["hi"]))    // $ExpectType ElementVNode<unknown>
+// $ExpectType ElementVNode<unknown>
+h("div", {}, memo(text, ["hi"]))
