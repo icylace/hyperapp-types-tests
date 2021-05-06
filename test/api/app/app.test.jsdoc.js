@@ -49,7 +49,7 @@ import { h, text, app } from "hyperapp"
 // -----------------------------------------------------------------------------
 
 /** @typedef {{ bar?: number, foo: number }} Test */
-/** @typedef {(props: App<Test>) => void} AppTest */
+/** @typedef {(props: App<Test>) => Dispatch<Test>} AppTest */
 
 /**
  * @template S

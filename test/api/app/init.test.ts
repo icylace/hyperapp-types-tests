@@ -1,4 +1,4 @@
-import type { Action, Effect, VNode } from "hyperapp"
+import type { VNode } from "hyperapp"
 
 import { text, app } from "hyperapp"
 
