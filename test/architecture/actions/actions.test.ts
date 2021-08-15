@@ -3,7 +3,7 @@ import type { Action, Dispatch, Effect } from "hyperapp"
 import { h, text, app } from "hyperapp"
 
 // State can be associated with a list of effects to run.
-type StateWithEffects<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
+type StateForm<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
 
 type Test = { x: number, y: number }
 
@@ -57,7 +57,7 @@ app<Test>({
 app<Test>({
   init: { x: 2, y: 4 },
   view: (state) => h("button", {
-    onkeypress: (state: Test): StateWithEffects<Test> => [
+    onkeypress: (state: Test): StateForm<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
@@ -85,11 +85,11 @@ app<Test>({
 app<Test>({
   init: { x: 2, y: 4 },
   view: (state) => h("button", {
-    onclick: (state: Test): StateWithEffects<Test> => [
+    onclick: (state: Test): StateForm<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
-    onkeypress: (state: Test): StateWithEffects<Test> => [
+    onkeypress: (state: Test): StateForm<Test> => [
       { ...state, x: state.x * 2 },
       justEcho("hi"),
     ],
