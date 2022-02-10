@@ -74,3 +74,18 @@ app({
     ]),
   node: document.getElementById("app")!
 })
+
+// -----------------------------------------------------------------------------
+
+const runEcho3 = (dispatch: Dispatch<State2>, data: string): void => {
+  console.log(data)
+  dispatch((state, x) => ({ ...state, message: x}), data)
+}
+
+const echo3 = (x: string): Effect<State2, string> => runEcho3
+
+const SomeAction2: Action<State2> = (state: State2) => [
+  state,
+  state.foo || echo3("hi"),
+  state.bar && echo3("there"),
+]

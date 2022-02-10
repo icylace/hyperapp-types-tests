@@ -120,14 +120,19 @@ declare module "hyperapp" {
     | Action<S, P>
     | readonly [action: Action<S, P>, payload: P]
 
-  // An effect is where side effects and any additional dispatching may occur.
-  type Effect<S, P = any> = readonly [
-    effecter: (dispatch: Dispatch<S>, payload: P) => void | Promise<void>,
+  // An Effecter is the function that runs an effect
+  type Effecter<S, P = any> = (
+    dispatch: Dispatch<S>,
     payload: P
-  ]
+  ) => void | Promise<void>
+
+  // An effect is where side effects and any additional dispatching may occur.
+  type Effect<S, P = any> =
+    | Effecter<S, P>
+    | readonly [effecter: Effecter<S, P>, payload: P]
 
   // Effects can be declared conditionally.
-  type MaybeEffect<S, P> = null | undefined | "" | 0 | boolean | Effect<S, P>
+  type MaybeEffect<S, P> = null | undefined | boolean | "" | 0 | Effect<S, P>
 
   // Event handlers are implemented using actions.
   type EventActions<S> = {
