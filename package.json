@@ -16,8 +16,8 @@
     "test": "./task.sh test"
   },
   "dependencies": {
-    "dtslint": "^4.0.9",
-    "hyperapp": "^2.0.15",
-    "typescript": "^4.2.4"
+    "@definitelytyped/dtslint": "^0.0.103",
+    "hyperapp": "^2.0.20",
+    "typescript": "^4.5.5"
   }
 }

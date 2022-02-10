@@ -35,3 +35,42 @@ echoEventually("hi")
 
 // TODO:
 // => Promise<Unsubscribe>
+
+// -----------------------------------------------------------------------------
+
+import type { Action } from "hyperapp"
+
+import { h, text, app } from "hyperapp"
+
+type State2 = {
+  foo: boolean
+  bar: boolean
+  message: string
+}
+
+const runEcho2 = (dispatch: Dispatch<State2>, data: string): void => {
+  console.log(data)
+  dispatch((state, x) => ({ ...state, message: x}), data)
+}
+
+const echo2 = (x: string): Effect<State2, string> => [runEcho2, x]
+
+const SomeAction: Action<State2> = (state: State2) => [
+  state,
+  state.foo || echo2("hi"),
+  state.bar && echo2("there"),
+]
+
+app({
+  init: () => ({
+    foo: false,
+    bar: true,
+    message: "",
+  }),
+  view: (state) =>
+    h("main", {}, [
+      h("p", {}, text(state.message)),
+      h("button", { onclick: SomeAction }, text("do it")),
+    ]),
+  node: document.getElementById("app")!
+})

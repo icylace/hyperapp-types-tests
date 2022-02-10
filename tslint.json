@@ -1,7 +1,7 @@
 {
   "//": "https://palantir.github.io/tslint/rules/",
   "///": "https://github.com/microsoft/dtslint/tree/master/docs",
-  "extends": "dtslint/dtslint.json",
+  "extends": "@definitelytyped/dtslint/dtslint.json",
   "linterOptions": {
     "exclude": ["**/*.js"]
   },

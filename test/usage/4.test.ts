@@ -1,4 +1,4 @@
-import { app, Subscription, Dispatch, Action, Unsubscribe } from 'hyperapp'
+import { app, Subscription, Dispatch, Action, Unsubscribe } from "hyperapp"
 
 type SubOpts<S> = { foo: Action<S, string> }
 

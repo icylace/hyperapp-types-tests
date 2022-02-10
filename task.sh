@@ -46,7 +46,7 @@ task:reset() {
 
   update_json '.dependencies = {} | .devDependencies = {}' ./package.json
 
-  npm install --save typescript dtslint hyperapp
+  npm install --save typescript @definitelytyped/dtslint hyperapp
 
   task:clean
 }
