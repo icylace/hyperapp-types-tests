@@ -120,7 +120,7 @@ declare module "hyperapp" {
     | Action<S, P>
     | readonly [action: Action<S, P>, payload: P]
 
-  // An Effecter is the function that runs an effect
+  // An effecter is the function that runs an effect.
   type Effecter<S, P = any> = (
     dispatch: Dispatch<S>,
     payload: P
