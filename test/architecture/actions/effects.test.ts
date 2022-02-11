@@ -96,4 +96,4 @@ const doSomethingFx = () => { alert("I did something") }
 
 const JustDoSomething = (state: State2) => [state, [doSomethingFx]]
 
-// const JustDoSomething = (state) => [state, doSomethingFx]
+const JustDoSomething2 = (state: State2) => [state, doSomethingFx]
