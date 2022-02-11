@@ -89,3 +89,11 @@ const SomeAction2: Action<State2> = (state: State2) => [
   state.foo || echo3("hi"),
   state.bar && echo3("there"),
 ]
+
+// -----------------------------------------------------------------------------
+
+const doSomethingFx = () => { alert("I did something") }
+
+const JustDoSomething = (state: State2) => [state, [doSomethingFx]]
+
+// const JustDoSomething = (state) => [state, doSomethingFx]
