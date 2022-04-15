@@ -1,6 +1,4 @@
-import type { Action, MaybeVNode, VNode } from "hyperapp"
-
-import { h, text } from "hyperapp"
+import { Action, MaybeVNode, VNode, h, text } from "hyperapp"
 
 type State = {
   coins: number

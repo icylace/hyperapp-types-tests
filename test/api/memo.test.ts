@@ -1,4 +1,4 @@
-import { h, text, memo } from "hyperapp"
+import { h, memo, text } from "hyperapp"
 
 memo()                    // $ExpectError
 memo(true)                // $ExpectError

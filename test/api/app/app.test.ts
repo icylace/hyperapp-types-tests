@@ -1,6 +1,4 @@
-import type { Action, App, Dispatch, Dispatchable, Effect } from "hyperapp"
-
-import { h, text, app } from "hyperapp"
+import { Action, App, Dispatch, Dispatchable, Effect, app, h, text } from "hyperapp"
 
 app()                    // $ExpectError
 app(true)                // $ExpectError

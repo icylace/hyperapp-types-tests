@@ -1,6 +1,4 @@
-import type { Action, Dispatch, Effect } from "hyperapp"
-
-import { h, text, app } from "hyperapp"
+import { Action, Dispatch, Effect, app, h, text } from "hyperapp"
 
 // State can be associated with a list of effects to run.
 type StateForm<S, P = any> = [state: S, ...effects: Effect<S, P>[]]
@@ -205,3 +203,16 @@ h("div", { onmouseenter: (state: State, payload: MouseEvent) => state })
 
 // $ExpectError
 h("div", { onmouseenter: (state: State, payload: number) => state })
+
+// -----------------------------------------------------------------------------
+
+// Credit: zaceno
+// https://discord.com/channels/804672552348680192/805746611467583499/945633010055782411
+
+type State2 = { foo: number, bar: string, baz: number }
+type FooPayload = { foo: number, bar: string }
+
+const FooAction: Action<State2, FooPayload> = (state, foo) => ({ ...state, ...foo })
+
+// $ExpectError
+const BarAction: Action<State2, FooPayload> = (_) => [FooAction, { foo: "yes", bar: 3 }]

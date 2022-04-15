@@ -1,6 +1,8 @@
 // https://discord.com/channels/804672552348680192/805746611467583499/882366935399022684
 
-import { Effect, Action, Dispatch } from "hyperapp"
+import { Action, Effect, Dispatch } from "hyperapp"
+
+// -----------------------------------------------------------------------------
 
 type Effecter<S, X> = (
   dispatch: Dispatch<S>,

@@ -1,6 +1,4 @@
-import type { Dispatch, Effect, VNode } from "hyperapp"
-
-import { h, text, app } from "hyperapp"
+import { Dispatch, Effect, VNode, app, h, text } from "hyperapp"
 
 // -----------------------------------------------------------------------------
 

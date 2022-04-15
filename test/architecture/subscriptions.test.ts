@@ -1,6 +1,4 @@
-import type { Dispatch, Unsubscribe } from "hyperapp"
-
-import { h, text, app } from "hyperapp"
+import { Dispatch, Unsubscribe, app, h, text } from "hyperapp"
 
 type Test = {
   foo: number

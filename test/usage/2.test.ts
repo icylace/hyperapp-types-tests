@@ -1,7 +1,9 @@
 // Credit:
 // https://github.com/jorgebucaran/hyperapp/discussions/1052#discussioncomment-632424
 
-import { h, text, Action, VNode } from "hyperapp"
+import { Action, VNode, h, text } from "hyperapp"
+
+// -----------------------------------------------------------------------------
 
 type MyComponentProps<S> = {
   foo: Action<S>

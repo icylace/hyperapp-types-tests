@@ -1,6 +1,4 @@
-import type { TypedH } from "hyperapp"
-
-import { h as ha } from "hyperapp"
+import { TypedH, h as ha } from "hyperapp"
 
 type S0 = false
 type S1 = true

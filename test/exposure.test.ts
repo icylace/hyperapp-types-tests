@@ -31,4 +31,4 @@ import type {
 } from "hyperapp"
 
 // Public functions. Attempting to import them should be fine.
-import { h, text, app, memo } from "hyperapp"
+import { app, h, memo, text } from "hyperapp"

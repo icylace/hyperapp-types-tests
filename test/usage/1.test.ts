@@ -1,12 +1,11 @@
 // Credit:
 // https://github.com/jorgebucaran/hyperapp/issues/1048
 
-import type { TypedH, VNode } from "hyperapp"
+import { TypedH, VNode, app, h, text } from "hyperapp"
 
-import { h, text, app } from "hyperapp"
+// -----------------------------------------------------------------------------
 
 type View<S> = (state: S) => VNode<S>
-
 type ShapeType = { type: string }
 type State = { shapes: ShapeType[] }
 

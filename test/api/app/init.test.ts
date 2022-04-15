@@ -1,11 +1,8 @@
-import type { VNode } from "hyperapp"
-
-import { text, app } from "hyperapp"
+import { VNode, app, text } from "hyperapp"
 
 // -----------------------------------------------------------------------------
 
 type View<S> = (state: S) => VNode<S>
-
 type State = { bar?: number, foo: number }
 
 const init: State = { foo: 0 }
@@ -18,5 +15,3 @@ app<string>({
   view: text,
   node: document.body,
 })
-
-// -----------------------------------------------------------------------------
