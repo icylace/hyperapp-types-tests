@@ -175,8 +175,11 @@ type State = {
   name: string
 }
 
-const AddFoo: Action<State, number> = (state, amount) => ({...state, foo: state.foo + amount})
-const SetName: Action<State, string> = (state, name) => ({...state, name})
+const AddFoo: Action<State, number> = (state, amount) =>
+  ({...state, foo: state.foo + amount})
+
+const SetName: Action<State, string> = (state, name) =>
+  ({...state, name})
 
 // $ExpectType ElementVNode<State>
 h("div", {
@@ -212,7 +215,9 @@ h("div", { onmouseenter: (state: State, payload: number) => state })
 type State2 = { foo: number, bar: string, baz: number }
 type FooPayload = { foo: number, bar: string }
 
-const FooAction: Action<State2, FooPayload> = (state, foo) => ({ ...state, ...foo })
+const FooAction: Action<State2, FooPayload> = (state, foo) =>
+  ({ ...state, ...foo })
 
 // $ExpectError
-const BarAction: Action<State2, FooPayload> = (_) => [FooAction, { foo: "yes", bar: 3 }]
+const BarAction: Action<State2, FooPayload> = (_) =>
+  [FooAction, { foo: "yes", bar: 3 }]

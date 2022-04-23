@@ -70,10 +70,7 @@ h<number>(-123, {})                // $ExpectError
 h<number>(-Infinity, {})           // $ExpectError
 h<number>(Infinity, {})            // $ExpectError
 h<number>(NaN, {})                 // $ExpectError
-
-// TODO:
 h<number>("", {})                  // $ExpectError
-
 h<number>(new String(""), {})      // $ExpectError
 h<number>("hi", {})                // $ExpectType ElementVNode<number>
 h<number>(new String("hi"), {})    // $ExpectError
