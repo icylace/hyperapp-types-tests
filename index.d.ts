@@ -141,6 +141,15 @@ declare module "hyperapp" {
       | readonly [action: Action<S>, payload: unknown]
   }
 
+  // TODO:
+
+  // // Event handlers are implemented using actions.
+  // type EventActions<S> = {
+  //   [K in keyof EventsMap]:
+  //     | Action<S, EventsMap[K]>
+  //     | readonly [action: Action<S>, payload: EventsMap[K]]
+  // }
+
   // In certain places a virtual DOM node can be made optional.
   type MaybeVNode<S> = boolean | null | undefined | VNode<S>
 
@@ -149,7 +158,6 @@ declare module "hyperapp" {
     Readonly<
       Partial<
         Omit<HTMLElement, keyof (
-          DocumentAndElementEventHandlers &
           ElementCSSInlineStyle &
           GlobalEventHandlers
         )> &

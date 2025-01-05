@@ -14,7 +14,7 @@ update_json() {
 
 # ------------------------------------------------------------------------------
 
-task:index() {
+task_index() {
   local tasks=(
     'reset'
     'test'
@@ -29,7 +29,7 @@ task:index() {
 
 # ------------------------------------------------------------------------------
 
-task:reset() {
+task_reset() {
   echo
   echo "Reinstalling dependencies..."
 
@@ -44,7 +44,19 @@ task:reset() {
   dev_modules+=('typescript')
   dev_modules+=('@definitelytyped/dtslint')
 
+  # Linting
+  # dev_modules+=('eslint')
+  # dev_modules+=('@typescript-eslint/parser')
+  # dev_modules+=('@typescript-eslint/eslint-plugin')
+  # dev_modules+=('eslint-config-standard')
+  # dev_modules+=('eslint-plugin-prettier')
+
   npm install --save-dev "${dev_modules[@]}"
+
+  # Biome
+  # One toolchain for your web project
+  # https://biomejs.dev/
+  npm install --save-dev --save-exact @biomejs/biome
 
   local modules=()
 
@@ -55,15 +67,15 @@ task:reset() {
 
 # ------------------------------------------------------------------------------
 
-task:test() {
+task_test() {
   npx dtslint
 }
 
 # ------------------------------------------------------------------------------
 
 if [ -z "$1" ] ; then
-  task:index
+  task_index
   exit 1
 fi
 
-"task:$1"
+"task_$1"

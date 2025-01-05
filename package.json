@@ -15,8 +15,9 @@
     "test": "./task.sh test"
   },
   "devDependencies": {
-    "@definitelytyped/dtslint": "^0.0.112",
-    "typescript": "^4.6.3"
+    "@biomejs/biome": "1.5.3",
+    "@definitelytyped/dtslint": "^0.2.1",
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "hyperapp": "^2.0.22"
